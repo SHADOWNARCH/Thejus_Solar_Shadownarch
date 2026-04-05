@@ -1,0 +1,135 @@
+/* =========================================
+   GLOBAL RESET & NAVIGATION
+   ========================================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9;
+    color: #333;
+}
+* { box-sizing: border-box; }
+
+.page-nav {
+    background-color: #000000;
+    color: white;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.logo img {
+    height: 45px;
+    vertical-align: middle;
+}
+.back-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.back-link i { margin-right: 5px; }
+.back-link:hover { color: #f1c40f; }
+
+/* =========================================
+   HUB LAYOUT
+   ========================================= */
+.hub-container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.hub-header {
+    margin-bottom: 50px;
+}
+.hub-header h2 {
+    font-size: 2.5rem;
+    color: #000000;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+}
+.hub-header p {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+}
+
+/* =========================================
+   ACTION CARDS
+   ========================================= */
+.action-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.action-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    border-top: 5px solid #447c2e; /* Green default */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    border-top-color: #f1c40f; /* Yellow on hover */
+}
+
+.icon-circle {
+    width: 90px;
+    height: 90px;
+    background: #000000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+}
+
+.icon-circle i {
+    font-size: 40px;
+    color: #f1c40f;
+}
+
+.action-card:hover .icon-circle {
+    background: #f1c40f;
+}
+.action-card:hover .icon-circle i {
+    color: #000000;
+}
+
+.action-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.6rem;
+    color: #000000;
+}
+
+.action-card p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .action-grid { flex-direction: column; align-items: center; }
+    .hub-header h2 { font-size: 2rem; }
+}

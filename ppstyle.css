@@ -1,0 +1,442 @@
+/* =========================================
+   1. GLOBAL RESET
+   ========================================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   2. TOP NAVIGATION
+   ========================================= */
+.profile-nav {
+    background-color: #000000;
+    color: white;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo img {
+    height: 45px;
+    vertical-align: middle;
+}
+
+.back-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.back-link i {
+    margin-right: 5px;
+}
+
+.back-link:hover {
+    color: #f1c40f; 
+}
+
+/* =========================================
+   3. PROFILE CONTAINER & CARD
+   ========================================= */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.profile-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-top: 5px solid #447c2e; 
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 25px 30px;
+    text-align: center;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 2rem;
+    color: #f1c40f; 
+}
+
+.card-header p {
+    margin: 5px 0 0 0;
+    color: #ccc;
+    font-size: 1rem;
+}
+
+.profile-form {
+    padding: 30px;
+}
+
+/* =========================================
+   4. PROFILE PICTURE SECTION
+   ========================================= */
+.profile-pic-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.pic-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    border: 3px solid #447c2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.avatar-placeholder i {
+    font-size: 60px;
+    color: #ccc;
+}
+
+.pic-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.btn-upload {
+    border: 1px solid #000000;
+    color: #000000;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.btn-upload:hover {
+    background-color: #000000;
+    color: #f1c40f;
+}
+
+/* =========================================
+   5. FORM SECTIONS & INPUTS
+   ========================================= */
+.form-section {
+    margin-bottom: 30px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.section-header h3 {
+    margin: 0;
+    color: #447c2e; 
+    font-size: 1.3rem;
+}
+
+.form-section > h3 {
+    margin: 0 0 15px 0;
+    color: #447c2e;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.btn-edit {
+    background-color: #eee;
+    color: #333;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #f1c40f;
+    color: #000000;
+}
+
+.section-note {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-box {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* Toggle Password Eye Icon Styling */
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #447c2e;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 45px; 
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: inherit;
+    color: #333;
+}
+
+.input-box input:focus {
+    outline: none;
+    border-color: #447c2e;
+    box-shadow: 0 0 5px rgba(68, 124, 46, 0.3);
+}
+
+.input-box input[readonly] {
+    background-color: #f0f0f0;
+    color: #666;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   6. TOAST POP-UP MESSAGES
+   ========================================= */
+.toast {
+    visibility: hidden;
+    min-width: 280px;
+    background-color: #d93025; /* Red for errors */
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px 20px;
+    position: fixed;
+    z-index: 3000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.4s ease, bottom 0.4s ease, visibility 0.4s;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px; /* Slides up smoothly */
+}
+
+.toast i {
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   7. ACTION BUTTONS
+   ========================================= */
+.form-actions, .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel, .btn-save {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: transparent;
+    border: 2px solid #ccc;
+    color: #555;
+}
+
+.btn-cancel:hover {
+    background-color: #eee;
+    color: #000;
+}
+
+.btn-save {
+    background-color: #f1c40f; 
+    border: 2px solid #f1c40f;
+    color: #000000;
+}
+
+.btn-save:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #f1c40f;
+}
+
+/* =========================================
+   8. IN-SITE MODAL STYLING
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.show-modal {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-card {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    border-top: 5px solid #f1c40f;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show-modal .modal-card {
+    transform: translateY(0);
+}
+
+.modal-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    color: #000000;
+}
+
+.modal-card p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.modal-actions {
+    margin-top: 25px;
+}
+
+/* =========================================
+   9. MOBILE RESPONSIVE
+   ========================================= */
+@media (max-width: 600px) {
+    .form-actions, .modal-actions {
+        flex-direction: column-reverse;
+    }
+    
+    .btn-cancel, .btn-save {
+        width: 100%;
+        text-align: center;
+    }
+
+    .card-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal-card {
+        padding: 25px;
+    }
+    
+    .toast {
+        min-width: 90%;
+        font-size: 0.9rem;
+    }
+}

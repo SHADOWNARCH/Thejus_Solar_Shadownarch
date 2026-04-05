@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Service Appointments | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="16x16">
+    <link rel="stylesheet" href="serappempstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="empdash.html"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="serappemp.html" class="active"><i class="fa-solid fa-briefcase"></i> <span>My Appointments</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>ALLOTED SERVICES</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                    <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="page-title">
+                <h1>My Service Appointments</h1>
+                <p>View your allotted tasks and update their completion status.</p>
+            </div>
+
+            <div class="table-container">
+                <table class="service-table">
+                    <thead>
+                        <tr>
+                            <th>Task ID</th>
+                            <th>Customer Name</th>
+                            <th>Contact & Address</th>
+                            <th>Service Type</th>
+                            <th>Scheduled Date</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#SRV-401</strong></td>
+                            <td>Ramesh Kumar</td>
+                            <td>
+                                <i class="fa-solid fa-phone"></i> +91 98765 12345<br>
+                                <i class="fa-solid fa-location-dot"></i> MG Road, Ernakulam
+                            </td>
+                            <td>Panel Washing</td>
+                            <td>15 Aug 2024<br><small>10:00 AM</small></td>
+                            <td>
+                                <select class="status-select status-incomplete" onchange="updateStatus(this, '#SRV-401')">
+                                    <option value="Incomplete" selected>Incomplete</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#SRV-402</strong></td>
+                            <td>SnehaGanga Clinic</td>
+                            <td>
+                                <i class="fa-solid fa-phone"></i> +91 91234 56789<br>
+                                <i class="fa-solid fa-location-dot"></i> Kacherippady
+                            </td>
+                            <td>Inverter Config</td>
+                            <td>16 Aug 2024<br><small>02:30 PM</small></td>
+                            <td>
+                                <select class="status-select status-inprogress" onchange="updateStatus(this, '#SRV-402')">
+                                    <option value="Incomplete">Incomplete</option>
+                                    <option value="In Progress" selected>In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+
+        function updateStatus(selectElement, taskId) {
+            const status = selectElement.value;
+            selectElement.classList.remove('status-incomplete', 'status-inprogress', 'status-completed');
+
+            if (status === 'Incomplete') {
+                selectElement.classList.add('status-incomplete');
+                showToast(`Task ${taskId} marked as Incomplete.`, 'error');
+            } else if (status === 'In Progress') {
+                selectElement.classList.add('status-inprogress');
+                showToast(`Task ${taskId} is In Progress.`, 'success'); 
+            } else if (status === 'Completed') {
+                selectElement.classList.add('status-completed');
+                showToast(`Task ${taskId} has been Completed!`, 'success');
+            }
+        }
+
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${message}`;
+            toast.style.backgroundColor = type === 'success' ? '#447c2e' : '#d93025';
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3500);
+        }
+    </script>
+</body>
+</html>

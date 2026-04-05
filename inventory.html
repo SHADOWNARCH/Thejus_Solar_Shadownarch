@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png">
+    <link rel="stylesheet" href="inventorystyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="managerdash.html"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="quogen.html"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Quotation Generation</span></a></li>
+            <li><a href="pendingquotation.html"><i class="fa-solid fa-list-ul"></i> <span>Pending Quotations</span></a></li>
+            <li><a href="serviceallotments.html"><i class="fa-solid fa-calendar-check"></i> <span>Service Allotments</span></a></li>
+            <li><a href="inventory.html" class="active"><i class="fa-solid fa-warehouse"></i> <span>Inventory Management</span></a></li>
+            <li><a href="purchasehistory.html"><i class="fa-solid fa-history"></i> <span>Purchase History</span></a></li>
+            <li><a href="manageemp.html"><i class="fa-solid fa-users-gear"></i> <span>Manage Employees</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>INVENTORY MANAGEMENT</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                     <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="page-info">
+                <h2>Warehouse Stock Levels</h2>
+                <p>Monitor real-time availability of solar components and initiate restock orders.</p>
+            </div>
+
+            <div class="table-container">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Product Details</th>
+                            <th>Category</th>
+                            <th>Stock Level</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="prod-item">
+                                    <div class="prod-img"><img src="sp31.jpg" onerror="this.src='https://via.placeholder.com/50'"></div>
+                                    <div class="prod-info">
+                                        <strong>Solar Panels 300W</strong>
+                                        <span>SKU: TJS-PNL-300</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="cat-tag">Panels</span></td>
+                            <td>
+                                <div class="qty-group">
+                                    <span class="qty-num high">45</span>
+                                    <small>Units Available</small>
+                                </div>
+                            </td>
+                            <td><span class="status-pill in-stock">In Stock</span></td>
+                            <td><button class="btn-restock disabled" disabled>Sufficient</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="prod-item">
+                                    <div class="prod-img"><img src="sp51.jpg" onerror="this.src='https://via.placeholder.com/50'"></div>
+                                    <div class="prod-info">
+                                        <strong>Solar Panels 500W</strong>
+                                        <span>SKU: TJS-PNL-500</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="cat-tag">Panels</span></td>
+                            <td>
+                                <div class="qty-group">
+                                    <span class="qty-num low">8</span>
+                                    <small>Units Left</small>
+                                </div>
+                            </td>
+                            <td><span class="status-pill low-stock">Low Stock</span></td>
+                            <td><button class="btn-restock active" onclick="showToast('Restock order placed for 500W Panels', 'success')">Order Now</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="prod-item">
+                                    <div class="prod-img"><img src="lb1.jpg" onerror="this.src='https://via.placeholder.com/50'"></div>
+                                    <div class="prod-info">
+                                        <strong>Lithium Battery 5kW</strong>
+                                        <span>SKU: TJS-BAT-LIT</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="cat-tag">Storage</span></td>
+                            <td>
+                                <div class="qty-group">
+                                    <span class="qty-num out">0</span>
+                                    <small>Empty</small>
+                                </div>
+                            </td>
+                            <td><span class="status-pill out-of-stock">Out of Stock</span></td>
+                            <td><button class="btn-restock urgent" onclick="showToast('URGENT: Battery restock initiated', 'error')">Urgent Order</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

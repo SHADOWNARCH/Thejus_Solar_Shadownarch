@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Quotations | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png">
+    <link rel="stylesheet" href="pendingquotationstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="managerdash.html" ><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="quogen.html"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Quotation Generation</span></a></li>
+            <li><a href="pendingquotation.html" class="active"><i class="fa-solid fa-list-ul"></i> <span>Pending Quotations</span></a></li>
+            <li><a href="serviceallotments.html"><i class="fa-solid fa-calendar-check"></i> <span>Service Allotments</span></a></li>
+            <li><a href="inventory.html"><i class="fa-solid fa-warehouse"></i> <span>Inventory Management</span></a></li>
+            <li><a href="purchasehistory.html"><i class="fa-solid fa-history"></i> <span>Purchase History</span></a></li>
+            <li><a href="manageemp.html"><i class="fa-solid fa-users-gear"></i> <span>Manage Employees</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>PENDING QUOTATION REQUESTS</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                     <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="page-info">
+                <h2>Pending Quotations</h2>
+                <p>Review and process pending system estimates for clients.</p>
+            </div>
+
+            <div class="table-container">
+                <table class="quote-table">
+                    <thead>
+                        <tr>
+                            <th>Client Name</th>
+                            <th>Contact Details</th>
+                            <th>Site Location</th>
+                            <th>Category</th>
+                            <th>Capacity</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Aniruddha G</strong></td>
+                            <td>
+                                <i class="fa-solid fa-phone"></i> +91 98765 43210<br>
+                                <i class="fa-solid fa-envelope"></i> ani@amrita.edu
+                            </td>
+                            <td>Edappally, Kochi</td>
+                            <td>Residential</td>
+                            <td>3 kW</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td><a href="quogen.html?id=1" class="btn-action">Generate</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Thejus Solar Solutions</strong></td>
+                            <td>
+                                <i class="fa-solid fa-phone"></i> +91 99887 76655<br>
+                                <i class="fa-solid fa-envelope"></i> office@thejus.com
+                            </td>
+                            <td>Vyttila, Kochi</td>
+                            <td>Commercial</td>
+                            <td>10 kW</td>
+                            <td><span class="status-badge done">Done</span></td>
+                            <td><a href="#" class="btn-action view">View</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

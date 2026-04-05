@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Service | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png">
+    <link rel="stylesheet" href="servicebookstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="custdash.html" ><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="quogen1.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Generate Quotation</span></a></li>
+            <li><a href="servicebook.html" class="active"><i class="fa-solid fa-calendar-check"></i> <span>Service Booking</span></a></li>
+            <li><a href="mybookings.html"><i class="fa-solid fa-list-ul"></i> <span>My Bookings</span></a></li>
+            <li><a href="rs.html"><i class="fa-solid fa-cart-shopping"></i> <span>Retail Store</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>BOOK A SERVICE</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                     <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="booking-container">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Service Request Form</h2>
+                        <p>Fill in the details below to schedule a maintenance visit.</p>
+                    </div>
+                    
+                    <form id="serviceForm" class="booking-form" novalidate onsubmit="return validateServiceForm(event)">
+                        <div class="form-section">
+                            <div class="section-title"><i class="fa-solid fa-id-card"></i> Contact Information</div>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Full Name</label>
+                                    <input type="text" id="custName" placeholder="Enter name" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" id="custPhone" placeholder="10-digit number" required>
+                                </div>
+                            </div>
+                            <!-- New Email Field -->
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" id="custEmail" placeholder="example@mail.com" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Site Address</label>
+                                <textarea id="custAddress" rows="2" placeholder="Solar plant location address" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="section-title"><i class="fa-solid fa-toolbox"></i> Service Details</div>
+                            <div class="input-group">
+                                <label>Type of Service</label>
+                                <select id="serviceType" required>
+                                    <option value="">-- Choose Service --</option>
+                                    <option value="Panel Washing">Panel Washing</option>
+                                    <option value="Inverter Config">Inverter Connection Configuration</option>
+                                    <option value="Dismantling">Panel Dismantling</option>
+                                </select>
+                            </div>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Preferred Date</label>
+                                    <input type="date" id="serviceDate" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Preferred Time (09:00 - 18:00)</label>
+                                    <input type="time" id="serviceTime" min="09:00" max="18:00" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="history.back()">Cancel</button>
+                            <button type="submit" class="btn-primary">Confirm Booking</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
+        
+        // Prevent past dates
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('serviceDate').setAttribute('min', today);
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+
+        // --- VALIDATION AND TOAST LOGIC[cite: 5] ---
+        function validateServiceForm(event) {
+            const name = document.getElementById('custName').value.trim();
+            const email = document.getElementById('custEmail').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const service = document.getElementById('serviceType').value;
+            const sDate = document.getElementById('serviceDate').value;
+            const sTime = document.getElementById('serviceTime').value;
+
+            // All fields required check[cite: 5]
+            if (!name || !email || !phone || !address || !service || !sDate || !sTime) {
+                event.preventDefault();
+                showToast("All fields are required.");
+                return false;
+            }
+
+            // Email Regex check[cite: 5]
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                event.preventDefault();
+                showToast("Please include an '@' and '.' in the email address.");
+                return false;
+            }
+
+            // Phone number digit check[cite: 5]
+            if (/\D/.test(phone)) {
+                event.preventDefault();
+                showToast("Type Error: Phone number must contain only numbers.");
+                return false;
+            }
+
+            // Phone length check[cite: 5]
+            if (phone.length !== 10) {
+                event.preventDefault();
+                showToast("Length Error: Phone number must be exactly 10 digits.");
+                return false;
+            }
+
+            // Time constraint validation (09:00 to 18:00)
+            if (sTime < "09:00" || sTime > "18:00") {
+                event.preventDefault();
+                showToast("Time Error: Please select a time between 09:00 and 18:00.");
+                return false;
+            }
+
+            return true; 
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+            toast.classList.add("show");
+            
+            setTimeout(function(){
+                toast.classList.remove("show");
+            }, 3500);
+        }
+    </script>
+</body>
+</html>

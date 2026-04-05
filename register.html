@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | THEJUS SOLAR POWER SOLUTIONS</title>
+    
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="16x16">
+    
+    <link rel="stylesheet" href="registerstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="BG1.mp4" type="video/mp4">
+    </video>
+
+    <div class="glass-box">
+        <img src="Thejus solar logo wbg.png" alt="Logo" class="logo">
+
+        <h1>CREATE ACCOUNT</h1>
+        <h3>Please register to continue</h3>
+
+        <form id="regForm" action="#" class="form-box" novalidate onsubmit="return validateRegisterForm(event)">
+
+            <div class="input-box">
+                <input type="text" id="regName" placeholder="Full Name" required>
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="input-box">
+                <input type="email" id="regEmail" placeholder="Email Address" required>
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <div class="input-box">
+                <input type="tel" id="regPhone" placeholder="Phone Number" required>
+                <i class="fa-solid fa-phone"></i>
+            </div>
+
+            <div class="input-box">
+                <input type="password" id="regPass" placeholder="Password" required>
+                <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('regPass', this)"></i>
+            </div>
+
+            <div class="input-box">
+                <input type="password" id="confirmPass" placeholder="Confirm Password" required>
+                <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('confirmPass', this)"></i>
+            </div>
+
+            <button type="submit" class="btn">Register</button>
+
+        </form>
+
+        <p class="switch-page">
+            Already have an account? 
+            <a href="login.html">Login</a>
+        </p>
+    </div>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        function toggleVisibility(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                iconElement.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                iconElement.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        function validateRegisterForm(event) {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const confirm = document.getElementById('confirmPass').value;
+
+            if (!name || !email || !phone || !pass || !confirm) {
+                event.preventDefault();
+                showToast("All fields are required.");
+                return false;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                event.preventDefault();
+                showToast("Please include an '@' and '.' in the email address.");
+                return false;
+            }
+
+            if (/\D/.test(phone)) {
+                event.preventDefault();
+                showToast("Type Error: Phone number must contain only numbers.");
+                return false;
+            }
+
+            if (phone.length !== 10) {
+                event.preventDefault();
+                showToast("Length Error: Phone number must be exactly 10 digits.");
+                return false;
+            }
+
+            const hasUppercase = /[A-Z]/.test(pass);
+            const hasNumber = /[0-9]/.test(pass);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
+
+            if (pass.length < 8 || !hasUppercase || !hasNumber || !hasSpecial) {
+                event.preventDefault();
+                showToast("Strong Password Required: Use 8+ chars, 1 uppercase, 1 number, and 1 special character.");
+                return false;
+            }
+
+            if (pass !== confirm) {
+                event.preventDefault();
+                showToast("Passwords do not match.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+            toast.classList.add("show");
+            
+            setTimeout(function(){
+                toast.classList.remove("show");
+            }, 3500);
+        }
+    </script>
+
+</body>
+</html>

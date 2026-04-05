@@ -1,0 +1,329 @@
+/* --- Global Reset & Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex; /* Fixes overlap: Sidebar and Content now sit side-by-side */
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: #000000; /* Black */
+    color: white;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex-shrink: 0; /* Prevents sidebar from being crushed by main content */
+}
+
+.sidebar.collapsed { 
+    width: 80px; /* Collapse width */
+}
+
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px; /* Matched to top-header height to align toggle button */
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-logo { 
+    width: 130px; 
+    transition: opacity 0.2s; 
+}
+
+.sidebar.collapsed .sidebar-logo { 
+    opacity: 0; 
+    pointer-events: none; 
+    width: 0; 
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #45cba4; /* Teal/Aqua */
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-links { 
+    list-style: none; 
+    margin-top: 20px; 
+}
+
+.nav-links li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.nav-links li a i {
+    font-size: 1.2rem;
+    min-width: 35px;
+    color: #f1892c; /* Gold/Orange */
+}
+
+.nav-links li a:hover, .nav-links li a.active {
+    background-color: rgba(69, 203, 164, 0.1);
+    border-left: 5px solid #45cba4; /* Teal accent */
+}
+
+.sidebar.collapsed .nav-links span { 
+    display: none; 
+}
+
+/* --- Main Content Area --- */
+.main-content {
+    flex-grow: 1; /* Automatically expands to fill remaining space */
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Ensures internal grid doesn't break layout */
+}
+
+.top-header {
+    height: 80px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.welcome-text h1 span { 
+    color: #447c2e; /* Deep Green */
+    font-weight: 800; 
+}
+
+/* --- Profile Section --- */
+.profile-section { 
+    position: relative; 
+}
+
+.profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #45cba4; /* Teal border */
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.profile-pic img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 65px;
+    right: 0;
+    width: 240px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: none;
+    padding: 10px 0;
+    z-index: 2000;
+}
+
+.dropdown-menu.show { 
+    display: block; 
+}
+
+.dropdown-menu a { 
+    display: flex; 
+    align-items: center; 
+    padding: 12px 20px; 
+    text-decoration: none; 
+    color: #333; 
+    font-weight: 600; 
+}
+
+.dropdown-menu a i { 
+    margin-right: 12px; 
+}
+
+.logout-link { 
+    color: #ff4d4d !important; /* Red for logout */
+}
+
+.dropdown-menu hr { 
+    border: 0; 
+    border-top: 1px solid #eee; 
+    margin: 8px 0; 
+}
+
+/* --- High-Color Navigation Grid --- */
+.dashboard-body { 
+    padding: 30px 40px; 
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.full-card {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 35px 25px;
+    border-radius: 18px;
+    color: white;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.full-card:not(.no-link):hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15); 
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-right: 20px;
+    background: rgba(255,255,255,0.2);
+}
+
+.arrow-icon { 
+    position: absolute; 
+    right: 25px; 
+    opacity: 0.6; 
+    transition: 0.3s; 
+}
+
+.full-card:hover .arrow-icon { 
+    right: 15px; 
+    opacity: 1; 
+}
+
+.stat-info h3 { 
+    font-size: 1.3rem; 
+    font-weight: 700; 
+    margin-bottom: 4px; 
+}
+
+.stat-label { 
+    font-size: 0.9rem; 
+    opacity: 0.9; 
+}
+
+/* Card Themes using Palette */
+.teal-card { background-color: #45cba4; }
+.orange-card { background-color: #f1892c; }
+.green-card { background-color: #447c2e; }
+
+/* --- Lower Section Styles --- */
+.dashboard-lower {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 30px;
+}
+
+.content-box {
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    background: white;
+}
+
+.activity-box h2 { 
+    font-size: 1.2rem; 
+    margin-bottom: 20px; 
+    color: #333; 
+}
+
+.activity-box li {
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #444;
+}
+
+.check-item i { color: #45cba4; }
+.info-item i { color: #f1892c; }
+
+/* Themed CTA Card */
+.get-started-card {
+    background-color: #f1892c; /* Gold/Orange */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.employee-cta {
+    background-color: #447c2e; /* Green for staff dashboard */
+}
+
+.get-started-card h2 { 
+    color: white; 
+    font-size: 1.5rem; 
+    margin-bottom: 10px; 
+}
+
+.get-started-card p { 
+    opacity: 0.9; 
+    margin-bottom: 20px; 
+}
+
+.btn-shop {
+    background: white;
+    color: #f1892c;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 700;
+    width: max-content;
+    transition: 0.3s;
+}
+
+.employee-cta .btn-shop {
+    color: #447c2e;
+}
+
+.btn-shop:hover { 
+    background: #000; 
+    color: white; 
+    transform: translateX(5px); 
+}
+
+/* Responsive Handling */
+@media (max-width: 900px) {
+    .dashboard-lower { 
+        grid-template-columns: 1fr; 
+    }
+}

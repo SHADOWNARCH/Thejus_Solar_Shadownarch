@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png">
+    <link rel="stylesheet" href="mybookingsstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="custdash.html" ><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="quogen1.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Generate Quotation</span></a></li>
+            <li><a href="servicebook.html"><i class="fa-solid fa-calendar-check"></i> <span>Service Booking</span></a></li>
+            <li><a href="mybookings.html"  class="active"><i class="fa-solid fa-list-ul"></i> <span>My Bookings</span></a></li>
+            <li><a href="rs.html"><i class="fa-solid fa-cart-shopping"></i> <span>Retail Store</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>MY BOOKINGS</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                     <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="page-info">
+                <h2>Your Service History</h2>
+                <p>Track the status of your current and past solar service requests.</p>
+            </div>
+
+            <div class="table-container">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Service Type</th>
+                            <th>Scheduled Date & Time</th>
+                            <th>Status</th>
+                            <th>Technician</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#BKG-801</strong></td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text">Panel Washing</span><br>
+                                    <span class="sub-text">Regular Maintenance</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text"><i class="fa-regular fa-calendar"></i> 20 Aug 2026</span><br>
+                                    <span class="sub-text"><i class="fa-regular fa-clock"></i> 10:00 AM</span>
+                                </div>
+                            </td>
+                            <td><span class="status-pill status-progress">In Progress</span></td>
+                            <td><span class="tech-info">Anoop Varghese</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#BKG-755</strong></td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text">Inverter Configuration</span><br>
+                                    <span class="sub-text">System Optimization</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text"><i class="fa-regular fa-calendar"></i> 12 Jul 2026</span><br>
+                                    <span class="sub-text"><i class="fa-regular fa-clock"></i> 02:30 PM</span>
+                                </div>
+                            </td>
+                            <td><span class="status-pill status-done">Completed</span></td>
+                            <td><span class="tech-info">Rahul K.</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#BKG-809</strong></td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text">Panel Dismantling</span><br>
+                                    <span class="sub-text">Relocation Request</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text"><i class="fa-regular fa-calendar"></i> 28 Aug 2026</span><br>
+                                    <span class="sub-text"><i class="fa-regular fa-clock"></i> 09:00 AM</span>
+                                </div>
+                            </td>
+                            <td><span class="status-pill status-pending">Pending</span></td>
+                            <td><span class="tech-pending">To be assigned</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

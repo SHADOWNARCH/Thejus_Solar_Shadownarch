@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="16x16">
+    <link rel="stylesheet" href="addempstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="page-nav">
+        <div class="logo">
+            <img src="Thejus solar logo wbg.png" alt="THEJUS Logo">
+        </div>
+        <a href="#" class="back-link" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Back to Manage Employees</a>
+    </nav>
+
+    <div class="form-container">
+        
+        <div class="form-card">
+            <div class="card-header">
+                <h2>Add New Employee</h2>
+                <p>Create a new staff account for the portal.</p>
+            </div>
+
+            <form action="#" class="employee-form" novalidate onsubmit="return validateEmployeeForm(event)">
+                
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-id-badge"></i> Employee Details</h3>
+                    
+                    <div class="input-group">
+                        <label for="empName">Full Name</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input type="text" id="empName" placeholder="Enter employee's full name" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="empEmail">Email Address</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-envelope input-icon"></i>
+                            <input type="email" id="empEmail" placeholder="Enter employee's email address" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="empPhone">Phone Number</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-phone input-icon"></i>
+                            <input type="tel" id="empPhone" placeholder="Enter employee's phone number" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-shield-halved"></i> Account Security</h3>
+
+                    <div class="input-group">
+                        <label for="empPass">Assign Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="empPass" placeholder="Create a password" required>
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('empPass', this)"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="empConfirmPass">Confirm Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-check-double input-icon"></i>
+                            <input type="password" id="empConfirmPass" placeholder="Confirm the password" required>
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('empConfirmPass', this)"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
+                    <button type="submit" class="btn-submit">Add Employee</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        // --- TOGGLE PASSWORD VISIBILITY ---
+        function togglePasswordVisibility(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                iconElement.classList.remove("fa-eye");
+                iconElement.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                iconElement.classList.remove("fa-eye-slash");
+                iconElement.classList.add("fa-eye");
+            }
+        }
+
+        // --- FORM VALIDATION LOGIC ---
+        function validateEmployeeForm(event) {
+            const name = document.getElementById('empName').value.trim();
+            const email = document.getElementById('empEmail').value.trim();
+            const phone = document.getElementById('empPhone').value.trim();
+            const pass = document.getElementById('empPass').value;
+            const confirmPass = document.getElementById('empConfirmPass').value;
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
+
+            // 1. Check for empty fields
+            if (name === "" || email === "" || phone === "" || pass === "" || confirmPass === "") {
+                event.preventDefault();
+                showToast("All fields are required.", "error");
+                return false;
+            }
+
+            // 2. Check Email
+            if (!emailRegex.test(email)) {
+                event.preventDefault();
+                showToast("Please enter a valid email address.", "error");
+                return false;
+            }
+
+            // 3. Check Phone
+            const rawPhone = phone.replace(/[\s\-]/g, ''); 
+            if (!phoneRegex.test(rawPhone) || rawPhone.length < 10) {
+                event.preventDefault();
+                showToast("Please enter a valid phone number (at least 10 digits).", "error");
+                return false;
+            }
+
+            // 4. Check Password Length
+            if (pass.length < 6) {
+                event.preventDefault();
+                showToast("Password must be at least 6 characters long.", "error");
+                return false;
+            }
+
+            // 5. Check Password Match
+            if (pass !== confirmPass) {
+                event.preventDefault();
+                showToast("Passwords do not match.", "error");
+                return false;
+            }
+
+            // If everything is correct, let the form submit naturally
+            // Uncomment the lines below if you just want to see the success toast instead of actually submitting
+            /*
+            event.preventDefault();
+            showToast("Employee added successfully!", "success");
+            return false;
+            */
+            
+            return true;
+        }
+
+        // --- TOAST POP-UP FUNCTION ---
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById("toastMsg");
+            if (type === 'success') {
+                toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
+                toast.style.backgroundColor = '#447c2e'; // Green
+                toast.style.borderLeft = '5px solid #2e541f'; // Darker green border
+            } else {
+                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+                toast.style.backgroundColor = '#d93025'; // Red
+                toast.style.borderLeft = '5px solid #a51f16'; // Darker red border
+            }
+            toast.classList.add("show");
+            
+            // Hide the toast after 3.5 seconds
+            setTimeout(function(){
+                toast.classList.remove("show");
+            }, 3500);
+        }
+    </script>
+
+</body>
+</html>

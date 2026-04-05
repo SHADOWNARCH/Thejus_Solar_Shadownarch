@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png">
+    <link rel="stylesheet" href="managerdashstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="managerdash.html" class="active"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="quogen.html"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Quotation Generation</span></a></li>
+            <li><a href="pendingquotation.html"><i class="fa-solid fa-list-ul"></i> <span>Pending Quotations</span></a></li>
+            <li><a href="serviceallotments.html"><i class="fa-solid fa-calendar-check"></i> <span>Service Allotments</span></a></li>
+            <li><a href="inventory.html"><i class="fa-solid fa-warehouse"></i> <span>Inventory Management</span></a></li>
+            <li><a href="purchasehistory.html"><i class="fa-solid fa-history"></i> <span>Purchase History</span></a></li>
+            <li><a href="manageemp.html"><i class="fa-solid fa-users-gear"></i> <span>Manage Employees</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>WELCOME TO THEJUS SOLAR</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                     <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="stats-grid">
+                <a href="quogen.html" class="full-card teal-card">
+                    <div class="stat-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                    <div class="stat-info">
+                        <h3>Quotation Generation</h3>
+                        <p class="stat-label">Create New Estimates</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </a>
+
+                <a href="pendingquotation.html" class="full-card orange-card">
+                    <div class="stat-icon"><i class="fa-solid fa-list-ul"></i></div>
+                    <div class="stat-info">
+                        <h3>Pending Quotations</h3>
+                        <p class="stat-label">View Pending Quotations</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </a>
+
+                <a href="allotappointments.html" class="full-card green-card">
+                    <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="stat-info">
+                        <h3>Service Allotments</h3>
+                        <p class="stat-label">Allot Appointments</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </a>
+
+                <a href="inventory.html" class="full-card teal-card">
+                    <div class="stat-icon"><i class="fa-solid fa-warehouse"></i></i></div>
+                    <div class="stat-info">
+                        <h3>Inventory</h3>
+                        <p class="stat-label">Stock & Asset Control</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </a>
+                <a href="purchasehistory.html" class="full-card orange-card">
+                    <div class="stat-icon"><i class="fa-solid fa-history"></i></div>
+                    <div class="stat-info">
+                        <h3>Purchase History</h3>
+                        <p class="stat-label">View Past Purchases</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </a>
+
+                <a href="manageemp.html" class="full-card green-card">
+                    <div class="stat-icon"><i class="fa-solid fa-users-gear"></i> </i></div>
+                    <div class="stat-info">
+                        <h3>Manage Employees</h3>
+                        <p class="stat-label">View, Edit, Create, Delete Employees</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleDropdown() {
+            document.getElementById('profileDropdown').classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+/* =========================================
+   1. GLOBAL RESET & UTILITIES
+   ========================================= */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   2. NAVIGATION
+   ========================================= */
+nav {
+    background-color: #000000;
+    color: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo img {
+    height: 50px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #f1c40f;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+}
+
+.btn-sign {
+    background: #f1c40f;
+    color: #000000 !important;
+    padding: 8px 18px;
+    border-radius: 4px;
+    transition: transform 0.2s !important;
+}
+
+.btn-sign:hover {
+    transform: scale(1.05);
+    background: #ffffff;
+}
+
+/* =========================================
+   3. HERO VIDEO SECTION
+   ========================================= */
+.video-container {
+    width: 100%;
+    background-color: #000;
+}
+
+.hero-video {
+    width: 100%;
+    display: block;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+/* =========================================
+   4. COMPACT ABOUT US SECTION
+   ========================================= */
+.about-section {
+    background-color: #f9f9f9;
+    padding-bottom: 50px;
+}
+
+.about-minimal-header {
+    padding: 40px 20px 10px;
+    text-align: center;
+}
+
+.about-minimal-header .subtitle h1 {
+    font-size: 2.1rem;
+    color: #000;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.about-minimal-header h1 strong {
+    color: #f1c40f;
+}
+
+.header-line {
+    width: 50px;
+    height: 4px;
+    background: #447c2e;
+    margin: 15px auto;
+    border-radius: 2px;
+}
+
+.about-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.content-block {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 60px;
+}
+
+.content-block.reverse {
+    flex-direction: row-reverse;
+}
+
+.text-side {
+    flex: 1;
+    text-align: justify;
+}
+
+.text-side h2 {
+    color: #447c2e;
+    margin-bottom: 15px;
+}
+
+.image-side {
+    flex: 1;
+}
+
+.image-side img {
+    width: 100%;
+    border-radius: 12px;
+    border: 5px solid #000000;
+}
+
+.values-section {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 40px;
+    border-top: 1px solid #ddd;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.value-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    border-top: 5px solid #447c2e;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.value-card i {
+    font-size: 2.5rem;
+    color: #f1c40f;
+    margin-bottom: 15px;
+}
+
+/* =========================================
+   5. MARQUEE SYSTEM (FIXED ALIGNMENT)
+   ========================================= */
+.marquee-section {
+    padding: 20px 0;
+}
+
+.marquee-container {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+}
+
+.main-marquee {
+    background: #ff9100; /* Services Theme */
+    padding: 40px 0;
+}
+
+.projects-theme .main-marquee {
+    background: #447c2e; /* Projects Theme */
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: scroll-left 30s linear infinite;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.marquee-item-wrapper {
+    display: flex;
+    gap: 60px;
+    padding-right: 60px;
+    /* CRITICAL FIX: Aligns all items to the top of the container */
+    align-items: flex-start; 
+}
+
+/* Individual Item Containers */
+.service-item, .project-item {
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Fixed width prevents jumping if text is long */
+    width: 220px; 
+    transition: transform 0.3s ease;
+}
+
+.project-item { color: #fff; }
+.service-item { color: #000; }
+
+.service-item:hover, .project-item:hover {
+    transform: scale(1.05);
+}
+
+/* Image Uniformity */
+.service-item img, .project-item img {
+    width: 220px;
+    height: 180px;
+    object-fit: cover;
+    border: 3px solid #000;
+    margin-bottom: 15px; /* Spacing between image and text */
+}
+
+.project-item img {
+    border-color: #f1c40f;
+}
+
+/* Text Consistency */
+.service-item span, .project-item span {
+    display: block;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    /* FIX: Reserves space for titles so long text doesn't push the card out of alignment */
+    min-height: 2.6em; 
+}
+
+/* =========================================
+   6. ADVANTAGES SECTION
+   ========================================= */
+.section-title {
+    text-align: center;
+    margin: 50px 0 30px;
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+
+.advantages-container {
+    display: flex;
+    gap: 25px;
+    padding: 0 5% 60px;
+    justify-content: center;
+}
+
+.advantage-card {
+    flex: 1;
+    padding: 25px;
+    background: #f9f9f9;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.advantage-card img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 3px solid #447c2e;
+}
+
+/* =========================================
+   7. CONTACT SECTION (BLACK THEME)
+   ========================================= */
+.contact-section {
+    padding: 80px 5%;
+    background-color: #ffffff;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.contact-header h2 {
+    font-size: 2.5rem;
+    color: #447c2e;
+    text-transform: uppercase;
+}
+
+.contact-header p {
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.contact-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.contact-card {
+    background: #000000;
+    color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    text-align: center;
+    flex: 1;
+    min-width: 280px;
+    max-width: 380px;
+    transition: 0.3s ease;
+    border-bottom: 5px solid #447c2e;
+}
+
+.contact-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
+
+.icon-box {
+    width: 70px;
+    height: 70px;
+    background: #222222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 2px solid #447c2e;
+}
+
+.icon-box i {
+    font-size: 30px;
+    color: #f1c40f;
+}
+
+.contact-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.contact-card p, .contact-card a {
+    color: #cccccc;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.contact-card a {
+    font-weight: 600;
+    display: block;
+    color: #ffffff;
+}
+
+.contact-card a:hover {
+    color: #f1c40f;
+}
+
+/* =========================================
+   8. PARTNERS FOOTER
+   ========================================= */
+.partners-section {
+    background: #447c2e;
+    padding-bottom: 30px;
+}
+
+.partner-marquee img {
+    height: 60px;
+    width: auto;
+    filter: grayscale(100%) brightness(2);
+    margin: 0 25px;
+}
+
+.partner-marquee img:hover {
+    filter: grayscale(0%) brightness(1);
+}
+
+/* =========================================
+   9. RESPONSIVENESS
+   ========================================= */
+@media (max-width: 768px) {
+    .content-block, .content-block.reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+    .advantages-container, .contact-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-links {
+        display: none; /* Mobile menu logic usually goes here */
+    }
+}

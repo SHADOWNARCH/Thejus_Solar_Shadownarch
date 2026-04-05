@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase History | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png">
+    <link rel="stylesheet" href="purchasehistorystyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="managerdash.html"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="quogen.html"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Quotation Generation</span></a></li>
+            <li><a href="pendingquotation.html"><i class="fa-solid fa-list-ul"></i> <span>Pending Quotations</span></a></li>
+            <li><a href="serviceallotments.html"><i class="fa-solid fa-calendar-check"></i> <span>Service Allotments</span></a></li>
+            <li><a href="inventory.html"><i class="fa-solid fa-warehouse"></i> <span>Inventory Management</span></a></li>
+            <li><a href="purchasehistory.html" class="active"><i class="fa-solid fa-history"></i> <span>Purchase History</span></a></li>
+            <li><a href="manageemp.html"><i class="fa-solid fa-users-gear"></i> <span>Manage Employees</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="welcome-text">
+                <h1><span>PURCHASE HISTORY</span></h1>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-pic" onclick="toggleDropdown()">
+                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                </div>
+                
+                <div class="dropdown-menu" id="profileDropdown">
+                     <a href="pp.html">
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                    </a>
+                    <hr>
+                    <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-body">
+            <div class="page-info">
+                <h2>Retail Transaction Logs</h2>
+                <p>Detailed overview of all customer orders and fulfillment statuses.</p>
+            </div>
+
+            <div class="orders-list">
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="header-meta">
+                            <div class="meta-item"><span>Order ID</span><strong>#ORD-88092</strong></div>
+                            <div class="meta-item"><span>Date</span><strong>05 Mar 2026</strong></div>
+                            <div class="meta-item"><span>Customer</span><strong>Ramesh Kumar</strong></div>
+                        </div>
+                        <div class="header-total">
+                            <span>Total Amount</span>
+                            <strong>₹38,000</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="order-content">
+                        <div class="items-area">
+                            <div class="product-snippet">
+                                <img src="lb1.jpg" alt="Battery" onerror="this.src='https://via.placeholder.com/60'">
+                                <div class="snippet-text">
+                                    <h4>Lithium Battery 5kW</h4>
+                                    <p>Qty: 2 | SKU: TJS-BAT-01</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions-area">
+                            <span class="status-pill processing">Processing</span>
+                            <button class="btn-invoice" onclick="showToast('Downloading Invoice...', 'success')">
+                                <i class="fa-solid fa-file-pdf"></i> Invoice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="header-meta">
+                            <div class="meta-item"><span>Order ID</span><strong>#ORD-75411</strong></div>
+                            <div class="meta-item"><span>Date</span><strong>12 Feb 2026</strong></div>
+                            <div class="meta-item"><span>Customer</span><strong>SnehaGanga Clinic</strong></div>
+                        </div>
+                        <div class="header-total">
+                            <span>Total Amount</span>
+                            <strong>₹29,000</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="order-content">
+                        <div class="items-area">
+                            <div class="product-snippet">
+                                <img src="sp31.jpg" alt="Panel" onerror="this.src='https://via.placeholder.com/60'">
+                                <div class="snippet-text">
+                                    <h4>Solar Panels 300W</h4>
+                                    <p>Qty: 1 | SKU: TJS-PNL-03</p>
+                                </div>
+                            </div>
+                            <div class="product-snippet">
+                                <img src="songi1.jpg" alt="Inverter" onerror="this.src='https://via.placeholder.com/60'">
+                                <div class="snippet-text">
+                                    <h4>On-Grid Inverter</h4>
+                                    <p>Qty: 1 | SKU: TJS-INV-01</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions-area">
+                            <span class="status-pill delivered">Delivered</span>
+                            <button class="btn-invoice" onclick="showToast('Downloading Invoice...', 'success')">
+                                <i class="fa-solid fa-file-pdf"></i> Invoice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
+            toast.className = `toast show ${type}`;
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

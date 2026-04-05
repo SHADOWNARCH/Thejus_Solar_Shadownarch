@@ -1,0 +1,140 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.glass-box {
+    width: 500px;
+    height: 600px;
+    padding: 35px;
+    text-align: center;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.logo {
+    width: 250px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 10px 0 5px;
+}
+
+h3 {
+    font-weight: normal;
+    margin-bottom: 20px;
+    color: rgba(255,255,255,0.85);
+}
+
+.input-box {
+    position: relative;
+    margin: 18px 0;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 25px;
+}
+
+.input-box input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+.input-box i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+}
+
+.forgot-link {
+    text-align: right;
+    font-size: 20px;
+    margin-top: -8px;
+}
+
+.forgot-link a {
+    color: white;
+    text-decoration: none;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 25px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.03);
+}
+
+.switch-page {
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.switch-page a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@media (max-width: 420px) {
+    .glass-box {
+        width: 90%;
+        padding: 25px;
+    }
+}

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Personalisation | THEJUS SOLAR</title>
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="16x16">
+    <link rel="stylesheet" href="ppstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="profile-nav">
+        <div class="logo">
+            <img src="Thejus solar logo wbg.png" alt="THEJUS Logo">
+        </div>
+        <a href="#" class="back-link" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+    </nav>
+
+    <div class="profile-container">
+        
+        <div class="profile-card">
+            <div class="card-header">
+                <h2>Profile Personalisation</h2>
+                <p>Update your personal details and account security.</p>
+            </div>
+
+            <form action="#" class="profile-form" onsubmit="return validateMainForm(event)">
+                
+                <div class="profile-pic-section">
+                    <div class="pic-wrapper">
+                        <div class="avatar-placeholder">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="upload-btn-wrapper">
+                        <button class="btn-upload" type="button"><i class="fa-solid fa-camera"></i> Change Photo</button>
+                        <input type="file" name="profile_pic" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-address-card"></i> Personal Information</h3>
+                        <button type="button" class="btn-edit" onclick="openEditModal()"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="fullName">Full Name</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input type="text" id="fullName" value="John Doe" readonly>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-envelope input-icon"></i>
+                            <input type="email" id="email" value="johndoe@example.com" readonly>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-phone input-icon"></i>
+                            <input type="tel" id="phone" value="+91 98765 43210" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-shield-halved"></i> Change Password</h3>
+                    <p class="section-note">Leave blank if you do not wish to change your password.</p>
+
+                    <div class="input-group">
+                        <label for="currentPass">Current Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="currentPass" placeholder="Enter current password">
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('currentPass', this)"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="newPass">New Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-key input-icon"></i>
+                            <input type="password" id="newPass" placeholder="Enter new password">
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('newPass', this)"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirmPass">Confirm New Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-check-double input-icon"></i>
+                            <input type="password" id="confirmPass" placeholder="Confirm new password">
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePasswordVisibility('confirmPass', this)"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div id="customEditModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Edit Personal Details</h3>
+            <p>Update your registration information below.</p>
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <div class="input-box">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" id="modalName">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Email Address</label>
+                <div class="input-box">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="modalEmail">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <div class="input-box">
+                    <i class="fa-solid fa-phone input-icon"></i>
+                    <input type="tel" id="modalPhone">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                <button type="button" class="btn-save" onclick="saveEditModal()">Confirm Details</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastMsg" class="toast"></div>
+
+    <script>
+        // --- TOGGLE PASSWORD VISIBILITY ---
+        function togglePasswordVisibility(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                iconElement.classList.remove("fa-eye");
+                iconElement.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                iconElement.classList.remove("fa-eye-slash");
+                iconElement.classList.add("fa-eye");
+            }
+        }
+
+        // --- MODAL LOGIC ---
+        function openEditModal() {
+            document.getElementById('modalName').value = document.getElementById('fullName').value;
+            document.getElementById('modalEmail').value = document.getElementById('email').value;
+            document.getElementById('modalPhone').value = document.getElementById('phone').value;
+            
+            document.getElementById('customEditModal').classList.add('show-modal');
+        }
+
+        function closeEditModal() {
+            document.getElementById('customEditModal').classList.remove('show-modal');
+        }
+
+        function saveEditModal() {
+            const name = document.getElementById('modalName').value.trim();
+            const email = document.getElementById('modalEmail').value.trim();
+            const phone = document.getElementById('modalPhone').value.trim();
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
+
+            if (name === "" || email === "" || phone === "") {
+                showToast("All fields are required.");
+                return;
+            }
+
+            if (!emailRegex.test(email)) {
+                showToast("Please enter a valid email address.");
+                return;
+            }
+
+            const rawPhone = phone.replace(/[\s\-]/g, ''); 
+            if (!phoneRegex.test(rawPhone) || rawPhone.length < 10) {
+                showToast("Please enter a valid phone number (at least 10 digits).");
+                return;
+            }
+
+            document.getElementById('fullName').value = name;
+            document.getElementById('email').value = email;
+            document.getElementById('phone').value = phone;
+            
+            closeEditModal();
+        }
+
+        // --- MAIN FORM LOGIC (Password matching) ---
+        function validateMainForm(event) {
+            const currentPass = document.getElementById('currentPass').value;
+            const newPass = document.getElementById('newPass').value;
+            const confirmPass = document.getElementById('confirmPass').value;
+
+            if (newPass !== "" || confirmPass !== "" || currentPass !== "") {
+                if (currentPass === "") {
+                    event.preventDefault();
+                    showToast("Please enter your current password to set a new one.");
+                    return false;
+                }
+                if (newPass.length < 6) {
+                    event.preventDefault();
+                    showToast("New password must be at least 6 characters long.");
+                    return false;
+                }
+                if (newPass !== confirmPass) {
+                    event.preventDefault();
+                    showToast("New password and Confirm password do not match.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // --- TOAST POP-UP FUNCTION ---
+        function showToast(message) {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+            toast.classList.add("show");
+            
+            // Hide the toast after 3.5 seconds
+            setTimeout(function(){
+                toast.classList.remove("show");
+            }, 3500);
+        }
+    </script>
+
+</body>
+</html>

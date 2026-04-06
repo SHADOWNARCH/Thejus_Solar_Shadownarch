@@ -2,7 +2,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
 body { display: flex; background-color: #f0f2f5; min-height: 100vh; overflow-x: hidden; }
 
-/* --- Sidebar (Synced with Dashboard) --- */
+/* --- Sidebar --- */
 .sidebar { width: 260px; height: 100vh; background-color: #000; color: white; transition: width 0.3s; position: sticky; top: 0; flex-shrink: 0; z-index: 1000; }
 .sidebar.collapsed { width: 80px; }
 .sidebar-header { padding: 20px; display: flex; align-items: center; justify-content: space-between; height: 80px; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -16,38 +16,34 @@ body { display: flex; background-color: #f0f2f5; min-height: 100vh; overflow-x: 
 .nav-links li a:hover, .nav-links li a.active { background: rgba(69, 203, 164, 0.1); border-left: 5px solid #45cba4; color: #45cba4; }
 .sidebar.collapsed .nav-links span { display: none; }
 
-/* --- Main Content Layout --- */
+/* --- Main Layout --- */
 .main-content { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
 .top-header { height: 80px; background: white; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-.welcome-text h1 { font-size: 1.4rem; color: #333; }
 .welcome-text h1 span { color: #447c2e; font-weight: 800; }
 
-/* --- Profile Dropdown --- */
-.profile-section { position: relative; display: flex; align-items: center; }
-.profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #45cba4; overflow: hidden; cursor: pointer; }
-.profile-pic img { width: 100%; height: 100%; object-fit: cover; }
-.dropdown-menu { position: absolute; top: 65px; right: 0; width: 240px; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; padding: 10px 0; z-index: 2000; border-top: 4px solid #447c2e; }
+.avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #45cba4; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #f8f9fa; transition: 0.3s; overflow: hidden; }
+.avatar i { font-size: 1.4rem; color: #447c2e; }
+
+.dropdown-menu { position: absolute; top: 65px; right: 0; width: 220px; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; padding: 10px 0; z-index: 2000; }
 .dropdown-menu.show { display: block; }
-.dropdown-menu a { display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: #333; font-weight: 600; transition: 0.2s; }
-.dropdown-menu a i { margin-right: 12px; color: #447c2e; }
-.dropdown-menu a:hover { background: #f9f9f9; color: #f1892c; }
+.dropdown-menu a { display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: #333; font-weight: 600; }
 .logout-link { color: #ff4d4d !important; border-top: 1px solid #eee; }
 
-/* --- Content & Table --- */
-.dashboard-body { padding: 30px 40px; overflow-y: auto; }
-.page-title h1 { color: #000; font-size: 1.8rem; margin-bottom: 5px; }
+/* --- Table Styling --- */
+.dashboard-body { padding: 30px 40px; }
+.page-title h1 { color: #000; font-size: 1.8rem; }
 .table-container { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow-x: auto; border-top: 5px solid #447c2e; margin-top: 20px; }
-.service-table { width: 100%; border-collapse: collapse; min-width: 800px; }
-.service-table th { background: #f8f9fa; padding: 18px; text-align: left; color: #000; text-transform: uppercase; font-size: 0.85rem; }
-.service-table td { padding: 18px; border-bottom: 1px solid #eee; font-size: 0.95rem; }
-.service-table td i { color: #f1892c; margin-right: 5px; width: 15px; }
+.service-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+.service-table th { background: #f8f9fa; padding: 18px; text-align: left; text-transform: uppercase; font-size: 0.85rem; }
+.service-table td { padding: 18px; border-bottom: 1px solid #eee; }
+.service-table td i { color: #f1892c; margin-right: 5px; }
 
-/* --- Status Selects --- */
+/* --- Status Dropdowns --- */
 .status-select { padding: 8px 15px; border-radius: 20px; font-weight: bold; border: 1px solid transparent; cursor: pointer; outline: none; }
-.status-incomplete { background: #feeced; color: #d93025; border-color: #f5c2c7; }
-.status-inprogress { background: #fff4e5; color: #f1892c; border-color: #ffe5cc; }
-.status-completed { background: #e6f4ea; color: #447c2e; border-color: #c3e6cb; }
+.status-incomplete { background: #feeced; color: #d93025; }
+.status-inprogress { background: #fff8e1; color: #f1892c; }
+.status-completed { background: #e6f4ea; color: #447c2e; }
 
 /* --- Toast --- */
-.toast { visibility: hidden; min-width: 300px; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 30px; transform: translateX(-50%); opacity: 0; transition: 0.4s; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-.toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+.toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); color: #fff; padding: 15px 30px; border-radius: 10px; z-index: 3000; transition: 0.4s; font-weight: 600; opacity: 0; }
+.toast.show { visibility: visible; bottom: 50px; opacity: 1; }

@@ -24,20 +24,23 @@
         <h1>WELCOME BACK</h1>
         <h3>Please login to continue</h3>
 
-        <form action="#" class="form-box">
+        <!-- Added id="loginForm" and onsubmit handler -->
+        <form id="loginForm" action="#" class="form-box" onsubmit="handleLogin(event)">
 
             <div class="input-box">
-                <input type="text" placeholder="Username" required>
-                <i class="fa-solid fa-user"></i>
+                <!-- Changed type to email for Firebase compatibility -->
+                <input type="email" id="loginEmail" placeholder="Email Address" required>
+                <i class="fa-solid fa-envelope"></i>
             </div>
 
             <div class="input-box">
-                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="loginPass" placeholder="Password" required>
                 <i class="fa-solid fa-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
             </div>
 
             <div class="forgot-link">
-                <a href="#">Forgot Password?</a>
+                <!-- Added onclick for Firebase Password Reset -->
+                <a href="#" onclick="forgotPassword()">Forgot Password?</a>
             </div>
 
             <button type="submit" class="btn">Login</button>
@@ -47,22 +50,105 @@
         <p class="switch-page">
             Don’t have an account? 
             <a href="register.html">Register</a>
-        </p>    
+        </p>     
 
     </div>
 
-    <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
+    <!-- Toast container for feedback -->
+    <div id="toastMsg" class="toast" style="visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #d32f2f; color: white; padding: 15px; border-radius: 8px;"></div>
 
-        togglePassword.addEventListener('click', function (e) {
-            // toggle the type attribute
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            // toggle the eye slash icon
+    <script type="module">
+        // 1. Import Firebase Functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // 2. Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        // 3. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- PASSWORD TOGGLE LOGIC ---
+        const toggleBtn = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#loginPass');
+
+        toggleBtn.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
+
+        // --- TOAST FUNCTION ---
+        function showToast(message, isSuccess = false) {
+            const toast = document.getElementById("toastMsg");
+            toast.innerText = message;
+            toast.style.background = isSuccess ? "#447c2e" : "#d32f2f";
+            toast.style.visibility = "visible";
+            setTimeout(() => { toast.style.visibility = "hidden"; }, 3500);
+        }
+
+        // --- LOGIN LOGIC ---
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            try {
+                // A. Guard checks the VIP list
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                // B. Fetch Role from the Filing Cabinet (Firestore)
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    // Redirect based on role
+                    if (userData.role === "manager") {
+                        window.location.href = "managerdash.html";
+                    } 
+                    else if (userData.role === "employee") {
+                        window.location.href = "empdash.html";
+                    } 
+                    else {
+                        window.location.href = "custdash.html"; 
+                        }
+                } else {
+                    showToast("User profile not found.");
+                }
+
+            } catch (error) {
+                let errorMsg = "Invalid email or password.";
+                if (error.code === 'auth/user-not-found') errorMsg = "No account found with this email.";
+                showToast(errorMsg);
+            }
+        };
+
+        // --- FORGOT PASSWORD LOGIC ---
+        window.forgotPassword = async function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            if (!email) {
+                showToast("Please enter your email address first.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showToast("Password reset email sent!", true);
+            } catch (error) {
+                showToast("Error: " + error.message);
+            }
+        };
     </script>
 
 </body>

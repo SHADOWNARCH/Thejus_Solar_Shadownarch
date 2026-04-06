@@ -19,14 +19,13 @@
     </nav>
 
     <div class="form-container">
-        
         <div class="form-card">
             <div class="card-header">
                 <h2>Add New Employee</h2>
                 <p>Create a new staff account for the portal.</p>
             </div>
 
-            <form action="#" class="employee-form" novalidate onsubmit="return validateEmployeeForm(event)">
+            <form id="addEmpForm" action="#" class="employee-form" novalidate onsubmit="validateEmployeeForm(event)">
                 
                 <div class="form-section">
                     <h3><i class="fa-solid fa-id-badge"></i> Employee Details</h3>
@@ -80,109 +79,104 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
-                    <button type="submit" class="btn-submit">Add Employee</button>
+                    <button type="submit" class="btn-submit" id="submitBtn">Add Employee</button>
                 </div>
 
             </form>
         </div>
-
     </div>
 
     <div id="toastMsg" class="toast"></div>
 
-    <script>
-        // --- TOGGLE PASSWORD VISIBILITY ---
-        function togglePasswordVisibility(inputId, iconElement) {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        // Initialize Primary App (for current Manager session)
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Initialize Secondary App (to create Employee without logging out Manager)
+        const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+        const secondaryAuth = getAuth(secondaryApp);
+
+        // --- UI FUNCTIONS ---
+        window.togglePasswordVisibility = function(inputId, iconElement) {
             const input = document.getElementById(inputId);
             if (input.type === "password") {
                 input.type = "text";
-                iconElement.classList.remove("fa-eye");
-                iconElement.classList.add("fa-eye-slash");
+                iconElement.classList.replace("fa-eye", "fa-eye-slash");
             } else {
                 input.type = "password";
-                iconElement.classList.remove("fa-eye-slash");
-                iconElement.classList.add("fa-eye");
+                iconElement.classList.replace("fa-eye-slash", "fa-eye");
             }
-        }
+        };
 
-        // --- FORM VALIDATION LOGIC ---
-        function validateEmployeeForm(event) {
+        window.showToast = function(message, type = 'error') {
+            const toast = document.getElementById("toastMsg");
+            toast.style.backgroundColor = type === 'success' ? '#447c2e' : '#d93025';
+            toast.style.borderLeft = type === 'success' ? '5px solid #2e541f' : '5px solid #a51f16';
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${message}`;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3500);
+        };
+
+        // --- MAIN LOGIC ---
+        window.validateEmployeeForm = async function(event) {
+            event.preventDefault();
+            
             const name = document.getElementById('empName').value.trim();
             const email = document.getElementById('empEmail').value.trim();
             const phone = document.getElementById('empPhone').value.trim();
             const pass = document.getElementById('empPass').value;
             const confirmPass = document.getElementById('empConfirmPass').value;
+            const submitBtn = document.getElementById('submitBtn');
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
+            // 1. Validations
+            if (!name || !email || !phone || !pass || !confirmPass) return showToast("All fields are required.");
+            if (pass.length < 6) return showToast("Password must be at least 6 characters.");
+            if (pass !== confirmPass) return showToast("Passwords do not match.");
 
-            // 1. Check for empty fields
-            if (name === "" || email === "" || phone === "" || pass === "" || confirmPass === "") {
-                event.preventDefault();
-                showToast("All fields are required.", "error");
-                return false;
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Creating...";
+
+                // 2. Create Employee Account using Secondary Auth
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, pass);
+                const newEmp = userCredential.user;
+
+                // 3. Store Employee Details in Firestore
+                await setDoc(doc(db, "users", newEmp.uid), {
+                    fullName: name,
+                    email: email,
+                    phone: phone,
+                    role: "employee", // Hardcoded role
+                    createdAt: new Date(),
+                    createdBy: "manager"
+                });
+
+                // 4. Log out the secondary instance immediately so it doesn't interfere
+                await signOut(secondaryAuth);
+
+                showToast("Employee added successfully!", "success");
+                setTimeout(() => { window.location.href = "manageemp.html"; }, 2000);
+
+            } catch (error) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Add Employee";
+                showToast(error.message);
             }
-
-            // 2. Check Email
-            if (!emailRegex.test(email)) {
-                event.preventDefault();
-                showToast("Please enter a valid email address.", "error");
-                return false;
-            }
-
-            // 3. Check Phone
-            const rawPhone = phone.replace(/[\s\-]/g, ''); 
-            if (!phoneRegex.test(rawPhone) || rawPhone.length < 10) {
-                event.preventDefault();
-                showToast("Please enter a valid phone number (at least 10 digits).", "error");
-                return false;
-            }
-
-            // 4. Check Password Length
-            if (pass.length < 6) {
-                event.preventDefault();
-                showToast("Password must be at least 6 characters long.", "error");
-                return false;
-            }
-
-            // 5. Check Password Match
-            if (pass !== confirmPass) {
-                event.preventDefault();
-                showToast("Passwords do not match.", "error");
-                return false;
-            }
-
-            // If everything is correct, let the form submit naturally
-            // Uncomment the lines below if you just want to see the success toast instead of actually submitting
-            /*
-            event.preventDefault();
-            showToast("Employee added successfully!", "success");
-            return false;
-            */
-            
-            return true;
-        }
-
-        // --- TOAST POP-UP FUNCTION ---
-        function showToast(message, type = 'error') {
-            const toast = document.getElementById("toastMsg");
-            if (type === 'success') {
-                toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
-                toast.style.backgroundColor = '#447c2e'; // Green
-                toast.style.borderLeft = '5px solid #2e541f'; // Darker green border
-            } else {
-                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
-                toast.style.backgroundColor = '#d93025'; // Red
-                toast.style.borderLeft = '5px solid #a51f16'; // Darker red border
-            }
-            toast.classList.add("show");
-            
-            // Hide the toast after 3.5 seconds
-            setTimeout(function(){
-                toast.classList.remove("show");
-            }, 3500);
-        }
+        };
     </script>
-
 </body>
 </html>

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retail Store | THEJUS SOLAR</title>
-    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="Thejus logo.png">
     <link rel="stylesheet" href="rsstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -17,7 +16,6 @@
         </div>
         <div class="nav-actions">
             <a href="#" class="back-link" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
-            
             <div class="cart-nav-item" onclick="openCart()">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span id="cartBadge" class="cart-badge">0</span>
@@ -32,36 +30,32 @@
     </header>
 
     <main class="store-container">
-        <div class="product-grid" id="productGrid"></div>
+        <div class="product-grid" id="productGrid">
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                <i class="fa-solid fa-spinner fa-spin fa-3x" style="color: #447c2e;"></i>
+                <p>Loading catalog...</p>
+            </div>
+        </div>
     </main>
 
     <div id="productModalOverlay" class="modal-overlay" onclick="closeProductModal(event)">
         <div class="product-modal-card">
             <button class="modal-close-btn" onclick="closeProductModal(event, true)"><i class="fa-solid fa-xmark"></i></button>
-            
             <div class="product-modal-content">
                 <div class="modal-gallery">
                     <div class="main-image">
-                        <img id="modalMainImg" src="" alt="Product" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img id="modalMainImg" src="" alt="Product" onerror="this.style.display='none';">
                         <div class="img-placeholder"><i id="modalIcon" class="fa-solid fa-box"></i></div>
                     </div>
-                    <div class="thumbnail-images" id="modalThumbs"></div>
                 </div>
-
                 <div class="modal-info">
                     <h2 id="modalTitle">Product Name</h2>
+                    <div id="modalStockLabel"></div>
                     <p class="modal-price" id="modalPrice">₹0</p>
-                    
                     <div class="modal-desc-box">
                         <h3>Description</h3>
-                        <p id="modalDesc"></p>
+                        <p id="modalDesc">Solar components built for durability.</p>
                     </div>
-
-                    <div class="modal-desc-box">
-                        <h3>Specifications</h3>
-                        <p id="modalDim"></p>
-                    </div>
-
                     <div class="modal-action-row">
                         <div class="qty-control modal-qty-control">
                             <button type="button" class="qty-btn" onclick="updateQty('modal-qty', -1)">-</button>
@@ -81,161 +75,230 @@
             <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
             <button class="close-cart-btn" onclick="closeCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        
         <div class="cart-items" id="cartItemsList">
             <p class="empty-cart-msg">Your cart is currently empty.</p>
         </div>
-
         <div class="cart-footer">
             <div class="cart-total">
                 <span>Subtotal</span>
                 <span id="cartTotalAmt">₹0</span>
             </div>
-            <a href="payment.html" class="checkout-btn" id="checkoutBtn" style="pointer-events: none; opacity: 0.5;">Proceed to Checkout</a>
+            <button class="checkout-btn" id="checkoutBtn" onclick="processCheckout()">Proceed to Checkout</button>
         </div>
     </div>
 
     <div id="toastMsg" class="toast"></div>
 
-    <script>
-        const productData = [
-            { name: "Solar Panels 300W", price: 9000, desc: "High-efficiency 300W Mono-PERC solar panel.", dim: "1640mm x 992mm x 35mm | 18kg", icon: "fa-solar-panel", images: ["sp31.jpg", "sp32.jpg"] },
-            { name: "Solar Panels 500W", price: 14000, desc: "Premium 500W Half-Cut cell solar panel.", dim: "2278mm x 1113mm x 35mm | 33kg", icon: "fa-solar-panel", images: ["sp51.jpg", "sp52.jpg"] },
-            { name: "Lithium Battery", price: 19000, desc: "Advanced LiFePO4 battery with deep discharge.", dim: "480mm x 170mm x 240mm | 22kg", icon: "fa-car-battery", images: ["lb1.jpg", "lb2.jpg"] },
-            { name: "On-Grid Inverter", price: 20000, desc: "Smart string inverter with Wi-Fi monitoring.", dim: "310mm x 543mm x 160mm | 11kg", icon: "fa-server", images: ["songi1.jpg", "songi2.jpg"] },
-            { name: "Off-Grid Inverter", price: 23000, desc: "Robust off-grid inverter for power-cut areas.", dim: "350mm x 480mm x 180mm | 15kg", icon: "fa-server", images: ["sofgi1.jpg", "sofgi2.jpg"] },
-            { name: "Hybrid Inverter", price: 25000, desc: "Hybrid inverter for Lithium-ion batteries.", dim: "400mm x 500mm x 200mm | 18kg", icon: "fa-car-battery", images: ["libi1.jpg", "libi2.jpg"] }
-        ];
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, writeBatch, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let inventory = [];
+        let cart = [];
+
+        onAuthStateChanged(auth, user => {
+            if (user) currentUser = user;
+            else window.location.href = "login.html";
+        });
+
+        // 1. Load Inventory in Real-Time
+        onSnapshot(collection(db, "inventory"), (snapshot) => {
+            inventory = [];
+            snapshot.forEach(doc => inventory.push({ id: doc.id, ...doc.data() }));
+            renderGrid();
+        });
 
         function renderGrid() {
             const grid = document.getElementById('productGrid');
-            grid.innerHTML = productData.map((p, i) => `
+            grid.innerHTML = inventory.map((p, i) => {
+                const isOutOfStock = p.stock <= 0;
+                const isLowStock = p.stock > 0 && p.stock <= 50;
+
+                return `
                 <div class="product-card">
-                    <div class="product-img" onclick="openProductModal(${i})">
-                        <img src="${p.images[0]}" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="icon-fallback" style="display:none;"><i class="fa-solid ${p.icon}"></i></div>
+                    <div class="product-img" onclick="openProductModal('${p.id}')">
+                        <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="icon-fallback" style="display:none;"><i class="fa-solid fa-box"></i></div>
                     </div>
                     <div class="product-details">
-                        <h3 onclick="openProductModal(${i})">${p.name}</h3>
+                        <h3 onclick="openProductModal('${p.id}')">${p.name}</h3>
                         <p class="price">₹${p.price.toLocaleString('en-IN')}</p>
+                        
+                        ${isOutOfStock ? '<span class="stock-badge out">Out of Stock</span>' : 
+                          isLowStock ? '<span class="stock-badge low">Only Pieces left!</span>' : ''}
+
                         <div class="add-to-cart-row">
                             <div class="qty-control">
-                                <button type="button" class="qty-btn" onclick="updateQty('grid-qty-${i}', -1)">-</button>
-                                <input type="number" id="grid-qty-${i}" class="qty-input" value="1" min="1" readonly>
-                                <button type="button" class="qty-btn" onclick="updateQty('grid-qty-${i}', 1)">+</button>
+                                <button type="button" class="qty-btn" onclick="updateQty('grid-qty-${p.id}', -1)">-</button>
+                                <input type="number" id="grid-qty-${p.id}" class="qty-input" value="1" min="1" readonly>
+                                <button type="button" class="qty-btn" onclick="updateQty('grid-qty-${p.id}', 1)">+</button>
                             </div>
-                            <button class="btn-add-cart" onclick="addFromGrid(${i})"><i class="fa-solid fa-cart-plus"></i> Add</button>
+                            <button class="btn-add-cart" onclick="addFromGrid('${p.id}')" ${isOutOfStock ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''}>
+                                <i class="fa-solid fa-cart-plus"></i> Add
+                            </button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
-        function updateQty(id, change) {
-            const input = document.getElementById(id);
-            input.value = Math.max(1, parseInt(input.value) + change);
-        }
+        window.openProductModal = (id) => {
+            const p = inventory.find(x => x.id === id);
+            if (!p) return;
 
-        function openProductModal(id) {
-            const p = productData[id];
             document.getElementById('modalTitle').innerText = p.name;
             document.getElementById('modalPrice').innerText = "₹" + p.price.toLocaleString('en-IN');
-            document.getElementById('modalDesc').innerText = p.desc;
-            document.getElementById('modalDim').innerText = p.dim;
+            document.getElementById('modalMainImg').src = p.img;
+            document.getElementById('modalMainImg').style.display = 'block';
             document.getElementById('modal-qty').value = 1;
-            
-            const mainImg = document.getElementById('modalMainImg');
-            mainImg.src = p.images[0];
-            mainImg.style.display = 'block';
-            document.getElementById('modalIcon').parentElement.style.display = 'none';
 
-            const thumbs = document.getElementById('modalThumbs');
-            thumbs.innerHTML = p.images.map(img => `
-                <div class="thumb" onclick="switchModalImage('${img}')">
-                    <img src="${img}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="thumb-icon-fallback" style="display:none;"><i class="fa-solid ${p.icon}"></i></div>
-                </div>
-            `).join('');
+            const modalStock = document.getElementById('modalStockLabel');
+            if (p.stock <= 0) modalStock.innerHTML = '<span class="stock-badge out">Currently Unavailable</span>';
+            else if (p.stock <= 50) modalStock.innerHTML = '<span class="stock-badge low">Limited Stock Available</span>';
+            else modalStock.innerHTML = '';
 
-            document.getElementById('modalAddBtn').onclick = () => {
-                addToCart(p.name, p.price, parseInt(document.getElementById('modal-qty').value));
-                closeProductModal(null, true);
-            };
-            document.getElementById('productModalOverlay').classList.add('show');
-        }
-
-        function switchModalImage(src) {
-            document.getElementById('modalMainImg').src = src;
-        }
-
-        function closeProductModal(e, force = false) {
-            if (force || e.target.id === 'productModalOverlay') {
-                document.getElementById('productModalOverlay').classList.remove('show');
+            const addBtn = document.getElementById('modalAddBtn');
+            if (p.stock <= 0) {
+                addBtn.disabled = true;
+                addBtn.innerText = "Out of Stock";
+                addBtn.style.background = "#ccc";
+            } else {
+                addBtn.disabled = false;
+                addBtn.innerText = "Add to Cart";
+                addBtn.style.background = "#f1892c";
+                addBtn.onclick = () => {
+                    addToCart(p.id, p.name, p.price, parseInt(document.getElementById('modal-qty').value), p.stock);
+                    closeProductModal(null, true);
+                };
             }
-        }
+            document.getElementById('productModalOverlay').classList.add('show');
+        };
 
-        let cart = [];
-        function addFromGrid(i) {
-            const p = productData[i];
-            const q = parseInt(document.getElementById(`grid-qty-${i}`).value);
-            addToCart(p.name, p.price, q);
-            document.getElementById(`grid-qty-${i}`).value = 1;
-        }
+        window.addFromGrid = (id) => {
+            const p = inventory.find(x => x.id === id);
+            const q = parseInt(document.getElementById(`grid-qty-${id}`).value);
+            addToCart(p.id, p.name, p.price, q, p.stock);
+        };
 
-        function addToCart(name, price, q) {
-            const item = cart.find(x => x.name === name);
-            if (item) item.qty += q; else cart.push({ name, price, qty: q });
+        function addToCart(id, name, price, q, maxStock) {
+            const existing = cart.find(x => x.id === id);
+            const currentQtyInCart = existing ? existing.qty : 0;
+
+            if (currentQtyInCart + q > maxStock) {
+                showToast(`Sorry, only ${maxStock} units available.`, "error");
+                return;
+            }
+
+            if (existing) existing.qty += q; 
+            else cart.push({ id, name, price, qty: q });
+
             updateCartUI();
-            showToast(`Added ${q}x ${name}`, "success");
+            showToast(`Added to cart!`, "success");
         }
 
-        function removeFromCart(i) {
-            cart.splice(i, 1);
-            updateCartUI();
-        }
+        window.processCheckout = async () => {
+            const btn = document.getElementById('checkoutBtn');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            const batch = writeBatch(db);
+            const purchaseItems = [];
+            let totalAmount = 0;
+
+            try {
+                // Prepare Updates
+                cart.forEach(item => {
+                    const itemRef = doc(db, "inventory", item.id);
+                    batch.update(itemRef, { stock: increment(-item.qty) });
+                    
+                    purchaseItems.push({
+                        productId: item.id,
+                        name: item.name,
+                        qty: item.qty,
+                        price: item.price
+                    });
+                    totalAmount += (item.price * item.qty);
+                });
+
+                // Record Purchase History
+                await addDoc(collection(db, "purchases"), {
+                    customerUid: currentUser.uid,
+                    customerEmail: currentUser.email,
+                    items: purchaseItems,
+                    total: totalAmount,
+                    timestamp: serverTimestamp(),
+                    status: "Completed"
+                });
+
+                await batch.commit();
+                
+                showToast("Order Placed Successfully!", "success");
+                cart = [];
+                updateCartUI();
+                closeCart();
+            } catch (e) {
+                showToast("Checkout Failed: " + e.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Proceed to Checkout";
+            }
+        };
+
+        // --- Shared Helpers ---
+        window.updateQty = (id, change) => {
+            const input = document.getElementById(id);
+            input.value = Math.max(1, parseInt(input.value) + change);
+        };
+        window.closeProductModal = (e, force) => { if (force || e.target.id === 'productModalOverlay') document.getElementById('productModalOverlay').classList.remove('show'); };
+        window.openCart = () => { document.getElementById('cartSidebar').classList.add('open'); document.getElementById('cartOverlay').classList.add('show'); };
+        window.closeCart = () => { document.getElementById('cartSidebar').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('show'); };
+        window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
 
         function updateCartUI() {
             const list = document.getElementById('cartItemsList');
-            const badge = document.getElementById('cartBadge');
             const total = document.getElementById('cartTotalAmt');
+            const badge = document.getElementById('cartBadge');
             const btn = document.getElementById('checkoutBtn');
 
-            let count = 0, sum = 0;
+            let sum = 0, count = 0;
             list.innerHTML = cart.length ? cart.map((item, i) => {
-                count += item.qty;
                 sum += (item.price * item.qty);
-                return `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <h4>${item.name}</h4>
-                            <p>₹${item.price.toLocaleString('en-IN')} x ${item.qty}</p>
-                        </div>
-                        <div class="cart-item-actions">
-                            <span class="item-total">₹${(item.price * item.qty).toLocaleString('en-IN')}</span>
-                            <button onclick="removeFromCart(${i})"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
+                count += item.qty;
+                return `<div class="cart-item">
+                    <div><h4>${item.name}</h4><p>₹${item.price.toLocaleString()} x ${item.qty}</p></div>
+                    <div style="text-align:right;"><span class="item-total">₹${(item.price * item.qty).toLocaleString()}</span><br>
+                    <button onclick="removeFromCart(${i})" style="color:red; background:none; border:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></div>
+                </div>`;
             }).join('') : '<p class="empty-cart-msg">Your cart is currently empty.</p>';
 
             badge.innerText = count;
             total.innerText = "₹" + sum.toLocaleString('en-IN');
-            btn.style.pointerEvents = cart.length ? "auto" : "none";
             btn.style.opacity = cart.length ? "1" : "0.5";
+            btn.style.pointerEvents = cart.length ? "auto" : "none";
         }
 
-        function openCart() { document.getElementById('cartSidebar').classList.add('open'); document.getElementById('cartOverlay').classList.add('show'); }
-        function closeCart() { document.getElementById('cartSidebar').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('show'); }
-
-        function showToast(msg, type = 'error') {
+        function showToast(msg, type) {
             const t = document.getElementById("toastMsg");
-            t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-exclamation'}"></i> ${msg}`;
+            t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-triangle-exclamation'}"></i> ${msg}`;
             t.style.backgroundColor = type === 'success' ? '#447c2e' : '#d93025';
             t.classList.add("show");
-            setTimeout(() => t.classList.remove("show"), 3500);
+            setTimeout(() => t.classList.remove("show"), 3000);
         }
-
-        window.onload = renderGrid;
     </script>
 </body>
 </html>

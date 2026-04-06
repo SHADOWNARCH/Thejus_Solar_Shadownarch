@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- Sidebar Container -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
@@ -27,16 +26,17 @@
         </ul>
     </nav>
 
-    <!-- Main Content Area -->
     <main class="main-content">
         <header class="top-header">
             <div class="welcome-text">
                 <h1><span>WELCOME TO THEJUS SOLAR</span></h1>
+                <p id="displayUserName" style="color: #447c2e; font-weight: bold; margin-left: 10px;"></p>
             </div>
             
             <div class="profile-section">
-                <div class="profile-pic" onclick="toggleDropdown()">
-                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                <!-- Updated Profile Avatar Icon -->
+                <div class="avatar" onclick="toggleDropdown()">
+                    <i class="fa-solid fa-user"></i>
                 </div>
                 
                 <div class="dropdown-menu" id="profileDropdown">
@@ -44,7 +44,7 @@
                         <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
                     </a>
                     <hr>
-                    <a href="lorr.html" class="logout-link">
+                    <a href="#" class="logout-link" onclick="handleLogout()">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </a>
                 </div>
@@ -52,13 +52,12 @@
         </header>
 
         <section class="dashboard-body">
-            <!-- High-Color Navigation Grid -->
             <div class="stats-grid">
                 <a href="quogen1.html" class="full-card teal-card">
                     <div class="stat-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                     <div class="stat-info">
                         <h3>Generate Quotation</h3>
-                        <p class="stat-label">Genrate a free quote</p>
+                        <p class="stat-label">Generate a free quote</p>
                     </div>
                     <i class="fa-solid fa-chevron-right arrow-icon"></i>
                 </a>
@@ -93,21 +92,53 @@
         </section>
     </main>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData.role !== "customer") {
+                        alert("Access Denied: Customers Only.");
+                        window.location.href = "login.html";
+                    } else {
+                        document.getElementById('displayUserName').innerText = `Customer: ${userData.fullName}`;
+                    }
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        window.handleLogout = function() {
+            signOut(auth).then(() => { window.location.href = "login.html"; });
+        };
+    </script>
+
     <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-        }
-
-        function toggleDropdown() {
-            document.getElementById('profileDropdown').classList.toggle('show');
-        }
-
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
         window.onclick = function(event) {
             if (!event.target.closest('.profile-section')) {
                 const dropdown = document.getElementById('profileDropdown');
-                if (dropdown && dropdown.classList.contains('show')) {
-                    dropdown.classList.remove('show');
-                }
+                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
             }
         }
     </script>

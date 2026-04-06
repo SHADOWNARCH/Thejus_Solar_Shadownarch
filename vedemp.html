@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Directory | THEJUS SOLAR</title>
-    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="Thejus logo.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="Thejus logo.png">
     <link rel="stylesheet" href="vedempstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -21,7 +20,7 @@
     <div class="table-wrapper">
         <div class="table-header">
             <h2>Employee Directory</h2>
-            <p>Manage current employee records below.</p>
+            <p>Manage current employee records and monitor their status.</p>
         </div>
 
         <div class="table-container">
@@ -37,42 +36,9 @@
                     </tr>
                 </thead>
                 <tbody id="employeeTableBody">
-                    <tr>
-                        <td>EMP-101</td>
-                        <td>Anoop Varghese</td>
-                        <td>anoop@thejussolar.com</td>
-                        <td>+91 98765 12345</td>
-                        <td><span class="status active">Active</span></td>
-                        <td class="action-btns">
-                            <button class="btn-icon view-btn" title="View" onclick="openViewModal(this)"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon edit-btn" title="Edit" onclick="openEditModal(this)"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn-icon delete-btn" title="Delete" onclick="openDeleteModal(this)"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>EMP-102</td>
-                        <td>Riya Krishnan</td>
-                        <td>riya@thejussolar.com</td>
-                        <td>+91 91234 56789</td>
-                        <td><span class="status active">Active</span></td>
-                        <td class="action-btns">
-                            <button class="btn-icon view-btn" title="View" onclick="openViewModal(this)"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon edit-btn" title="Edit" onclick="openEditModal(this)"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn-icon delete-btn" title="Delete" onclick="openDeleteModal(this)"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>EMP-103</td>
-                        <td>Thomas Mathew</td>
-                        <td>thomas@thejussolar.com</td>
-                        <td>+91 99887 76655</td>
-                        <td><span class="status inactive">Inactive</span></td>
-                        <td class="action-btns">
-                            <button class="btn-icon view-btn" title="View" onclick="openViewModal(this)"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon edit-btn" title="Edit" onclick="openEditModal(this)"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn-icon delete-btn" title="Delete" onclick="openDeleteModal(this)"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
+                    <tr><td colspan="6" style="text-align:center; padding: 40px; color: #888;">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Loading employees...
+                    </td></tr>
                 </tbody>
             </table>
         </div>
@@ -81,46 +47,42 @@
     <div id="viewModal" class="modal-overlay">
         <div class="modal-card form-modal">
             <h3>Employee Details</h3>
-            <p>Read-only view of the employee record.</p>
+            <p>Full employee record (Read-Only).</p>
 
             <div class="input-group">
-                <label>Employee ID</label>
+                <label>Employee UID</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-id-badge input-icon"></i>
+                    <i class="fa-solid fa-id-badge"></i>
                     <input type="text" id="viewId" readonly>
                 </div>
             </div>
+
             <div class="input-group">
                 <label>Full Name</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-user input-icon"></i>
+                    <i class="fa-solid fa-user"></i>
                     <input type="text" id="viewName" readonly>
                 </div>
             </div>
+
             <div class="input-group">
                 <label>Email Address</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <i class="fa-solid fa-envelope"></i>
                     <input type="email" id="viewEmail" readonly>
                 </div>
             </div>
+
             <div class="input-group">
                 <label>Phone Number</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-phone input-icon"></i>
+                    <i class="fa-solid fa-phone"></i>
                     <input type="text" id="viewPhone" readonly>
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Status</label>
-                <div class="input-box">
-                    <i class="fa-solid fa-circle-info input-icon"></i>
-                    <input type="text" id="viewStatus" readonly>
                 </div>
             </div>
 
             <div class="modal-actions">
-                <button class="btn-cancel" onclick="closeViewModal()" style="width: 100%;">Close</button>
+                <button class="btn-cancel" onclick="closeModal('viewModal')" style="width: 100%;">Close</button>
             </div>
         </div>
     </div>
@@ -128,40 +90,36 @@
     <div id="editModal" class="modal-overlay">
         <div class="modal-card form-modal">
             <h3>Edit Employee</h3>
-            <p>Update the employee's information below.</p>
+            <p>Update employee contact information and system status.</p>
 
             <div class="input-group">
-                <label>Employee ID (Read Only)</label>
+                <label>UID (Read Only)</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-id-badge input-icon"></i>
+                    <i class="fa-solid fa-fingerprint"></i>
                     <input type="text" id="editId" readonly class="readonly-bg">
                 </div>
             </div>
+
             <div class="input-group">
                 <label>Full Name</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-user input-icon"></i>
+                    <i class="fa-solid fa-user-pen"></i>
                     <input type="text" id="editName">
                 </div>
             </div>
-            <div class="input-group">
-                <label>Email Address</label>
-                <div class="input-box">
-                    <i class="fa-solid fa-envelope input-icon"></i>
-                    <input type="email" id="editEmail">
-                </div>
-            </div>
+
             <div class="input-group">
                 <label>Phone Number</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-phone input-icon"></i>
+                    <i class="fa-solid fa-mobile-screen"></i>
                     <input type="tel" id="editPhone">
                 </div>
             </div>
+
             <div class="input-group">
                 <label>Status</label>
                 <div class="input-box">
-                    <i class="fa-solid fa-toggle-on input-icon"></i>
+                    <i class="fa-solid fa-circle-check"></i>
                     <select id="editStatus" class="custom-select">
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
@@ -170,150 +128,127 @@
             </div>
 
             <div class="modal-actions">
-                <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-                <button class="btn-save" onclick="saveEditModal()">Save Changes</button>
+                <button class="btn-cancel" onclick="closeModal('editModal')">Cancel</button>
+                <button class="btn-save" id="saveEditBtn">Save Changes</button>
             </div>
         </div>
     </div>
 
     <div id="deleteModal" class="modal-overlay">
         <div class="modal-card">
-            <div class="modal-icon warning">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
+            <div class="modal-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
             <h3>Delete Employee?</h3>
-            <p>Are you sure you want to permanently remove this employee from the system? This action cannot be undone.</p>
+            <p>Assigned jobs will be reset to <b>Pending</b>. This action is permanent.</p>
             <div class="modal-actions">
-                <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-                <button class="btn-danger" onclick="confirmDelete()">Yes, Delete</button>
+                <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+                <button class="btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
             </div>
         </div>
     </div>
 
     <div id="toastMsg" class="toast"></div>
 
-    <script>
-        let currentRow = null;
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // --- VIEW MODAL LOGIC ---
-        function openViewModal(button) {
-            currentRow = button.closest('tr');
-            const cells = currentRow.querySelectorAll('td');
-            
-            document.getElementById('viewId').value = cells[0].innerText;
-            document.getElementById('viewName').value = cells[1].innerText;
-            document.getElementById('viewEmail').value = cells[2].innerText;
-            document.getElementById('viewPhone').value = cells[3].innerText;
-            document.getElementById('viewStatus').value = cells[4].innerText.trim();
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let activeUID = null;
+        let activeName = "";
+
+        const q = query(collection(db, "users"), where("role", "==", "employee"));
+        onSnapshot(q, (snapshot) => {
+            const tableBody = document.getElementById('employeeTableBody');
+            let html = "";
+            snapshot.forEach((doc) => {
+                const u = doc.data();
+                const uid = doc.id;
+                const status = u.status || "Active";
+                
+                html += `
+                    <tr>
+                        <td><strong>${uid.substring(0, 8).toUpperCase()}</strong></td>
+                        <td>${u.fullName}</td>
+                        <td>${u.email}</td>
+                        <td>${u.phone}</td>
+                        <td><span class="status ${status.toLowerCase()}">${status}</span></td>
+                        <td class="action-btns">
+                            <button class="btn-icon view-btn" title="View" onclick="openView('${uid}', '${u.fullName}', '${u.email}', '${u.phone}')"><i class="fa-solid fa-eye"></i></button>
+                            <button class="btn-icon edit-btn" title="Edit" onclick="openEdit('${uid}', '${u.fullName}', '${u.phone}', '${status}')"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-icon delete-btn" title="Delete" onclick="openDelete('${uid}', '${u.fullName}')"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+            tableBody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;">No employees found.</td></tr>';
+        });
+
+        window.openView = (id, name, email, phone) => {
+            document.getElementById('viewId').value = id;
+            document.getElementById('viewName').value = name;
+            document.getElementById('viewEmail').value = email;
+            document.getElementById('viewPhone').value = phone;
             document.getElementById('viewModal').classList.add('show-modal');
-        }
+        };
 
-        function closeViewModal() {
-            document.getElementById('viewModal').classList.remove('show-modal');
-            currentRow = null;
-        }
-
-        // --- EDIT MODAL LOGIC ---
-        function openEditModal(button) {
-            currentRow = button.closest('tr');
-            const cells = currentRow.querySelectorAll('td');
-            
-            document.getElementById('editId').value = cells[0].innerText;
-            document.getElementById('editName').value = cells[1].innerText;
-            document.getElementById('editEmail').value = cells[2].innerText;
-            document.getElementById('editPhone').value = cells[3].innerText;
-            document.getElementById('editStatus').value = cells[4].innerText.trim();
-
+        window.openEdit = (id, name, phone, status) => {
+            activeUID = id;
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editPhone').value = phone;
+            document.getElementById('editStatus').value = status;
             document.getElementById('editModal').classList.add('show-modal');
-        }
+        };
 
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('show-modal');
-            currentRow = null;
-        }
-
-        function saveEditModal() {
-            const name = document.getElementById('editName').value.trim();
-            const email = document.getElementById('editEmail').value.trim();
-            const phone = document.getElementById('editPhone').value.trim();
-            const status = document.getElementById('editStatus').value;
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
-
-            // Validation
-            if (name === "" || email === "" || phone === "") {
-                showToast("All fields are required.");
-                return;
-            }
-            if (!emailRegex.test(email)) {
-                showToast("Please enter a valid email address.");
-                return;
-            }
-            const rawPhone = phone.replace(/[\s\-]/g, ''); 
-            if (!phoneRegex.test(rawPhone) || rawPhone.length < 10) {
-                showToast("Please enter a valid phone number (at least 10 digits).");
-                return;
-            }
-
-            // Update Table Row
-            const cells = currentRow.querySelectorAll('td');
-            cells[1].innerText = name;
-            cells[2].innerText = email;
-            cells[3].innerText = phone;
-            
-            // Update Status Badge specifically
-            const statusSpan = cells[4].querySelector('span');
-            statusSpan.innerText = status;
-            if(status === 'Active') {
-                statusSpan.className = 'status active';
-            } else {
-                statusSpan.className = 'status inactive';
-            }
-
-            closeEditModal();
-            showToast("Employee details updated successfully!", "success");
-        }
-
-        // --- DELETE MODAL LOGIC ---
-        function openDeleteModal(button) {
-            rowToDelete = button.closest('tr');
+        window.openDelete = (id, name) => {
+            activeUID = id;
+            activeName = name;
             document.getElementById('deleteModal').classList.add('show-modal');
-        }
+        };
 
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('show-modal');
-            rowToDelete = null;
-        }
+        window.closeModal = (id) => document.getElementById(id).classList.remove('show-modal');
 
-        function confirmDelete() {
-            if (rowToDelete) {
-                rowToDelete.remove();
-                closeDeleteModal();
-                showToast("Employee successfully deleted.", "success");
-            }
-        }
+        document.getElementById('saveEditBtn').onclick = async () => {
+            try {
+                await updateDoc(doc(db, "users", activeUID), {
+                    fullName: document.getElementById('editName').value,
+                    phone: document.getElementById('editPhone').value,
+                    status: document.getElementById('editStatus').value
+                });
+                showToast("Profile Updated", "success");
+                closeModal('editModal');
+            } catch (e) { showToast("Update Failed"); }
+        };
 
-        // --- REUSABLE TOAST POP-UP FUNCTION ---
-        function showToast(message, type = 'error') {
-            const toast = document.getElementById("toastMsg");
-            if (type === 'success') {
-                toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
-                toast.style.backgroundColor = '#447c2e'; 
-                toast.style.borderLeft = '5px solid #2e541f'; 
-            } else {
-                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
-                toast.style.backgroundColor = '#d93025'; 
-                toast.style.borderLeft = '5px solid #a51f16'; 
-            }
-            toast.classList.add("show");
-            
-            setTimeout(function(){
-                toast.classList.remove("show");
-            }, 3500);
+        document.getElementById('confirmDeleteBtn').onclick = async () => {
+            try {
+                const batch = writeBatch(db);
+                const bookingsSnap = await getDocs(query(collection(db, "bookings"), where("technician", "==", activeName)));
+                bookingsSnap.forEach(d => batch.update(d.ref, { technician: "", status: "Pending" }));
+                await batch.commit();
+                await deleteDoc(doc(db, "users", activeUID));
+                showToast("Employee and Assignments Removed", "success");
+                closeModal('deleteModal');
+            } catch (e) { showToast("Delete Failed"); }
+        };
+
+        function showToast(msg, type = 'error') {
+            const t = document.getElementById("toastMsg");
+            t.innerText = msg;
+            t.style.backgroundColor = type === 'success' ? '#447c2e' : '#d93025';
+            t.classList.add("show");
+            setTimeout(() => t.classList.remove("show"), 3000);
         }
     </script>
-
 </body>
 </html>

@@ -7,7 +7,7 @@
 }
 
 body {
-    display: flex; /* Sidebar and Content sit side-by-side */
+    display: flex;
     background-color: #f0f2f5;
     min-height: 100vh;
     width: 100%;
@@ -24,7 +24,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    flex-shrink: 0; /* Prevents sidebar from being squashed */
+    flex-shrink: 0;
 }
 
 .sidebar.collapsed { width: 80px; }
@@ -34,7 +34,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 80px; /* Aligned with top-header */
+    height: 80px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -44,7 +44,7 @@ body {
 .toggle-btn {
     background: none;
     border: none;
-    color: #45cba4; /* Teal */
+    color: #45cba4;
     font-size: 1.5rem;
     cursor: pointer;
     display: flex;
@@ -52,7 +52,6 @@ body {
 }
 
 .nav-links { list-style: none; margin-top: 20px; }
-
 .nav-links li a {
     display: flex;
     align-items: center;
@@ -66,7 +65,7 @@ body {
 .nav-links li a i {
     font-size: 1.2rem;
     min-width: 35px;
-    color: #f1892c; /* Gold/Orange */
+    color: #f1892c;
 }
 
 .nav-links li a:hover, .nav-links li a.active {
@@ -76,9 +75,9 @@ body {
 
 .sidebar.collapsed .nav-links span { display: none; }
 
-/* --- Top Header & Profile --- */
+/* --- Top Header & Profile Avatar --- */
 .main-content { 
-    flex-grow: 1; /* Takes up remaining width */
+    flex-grow: 1; 
     display: flex; 
     flex-direction: column; 
     min-width: 0;
@@ -97,15 +96,30 @@ body {
 .welcome-text h1 span { color: #447c2e; font-weight: 800; }
 
 .profile-section { position: relative; }
-.profile-pic {
+
+/* Updated Avatar Styling */
+.avatar {
     width: 45px;
     height: 45px;
     border-radius: 50%;
     border: 2px solid #45cba4;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    background-color: #f8f9fa;
+    transition: 0.3s ease;
 }
-.profile-pic img { width: 100%; height: 100%; object-fit: cover; }
+
+.avatar i {
+    font-size: 1.4rem;
+    color: #447c2e;
+}
+
+.avatar:hover {
+    background-color: #eef1ef;
+    border-color: #f1892c;
+}
 
 .dropdown-menu {
     position: absolute;
@@ -154,7 +168,7 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.full-card:not(.no-link):hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+.full-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
 
 .stat-icon {
     width: 60px;
@@ -179,55 +193,7 @@ body {
 .orange-card { background-color: #f1892c; }
 .green-card { background-color: #447c2e; }
 
-/* --- Lower Section --- */
-.dashboard-lower {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 30px;
-}
-
-.content-box {
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    background: white;
-}
-
-.activity-box h2 { font-size: 1.2rem; margin-bottom: 20px; color: #333; }
-.activity-box li {
-    padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #444;
-}
-.check-item i { color: #45cba4; }
-.info-item i { color: #f1892c; }
-
-/* Employee CTA Card */
-.get-started-card {
-    background-color: #447c2e; /* Deep Green for staff */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.get-started-card h2 { color: white; font-size: 1.5rem; margin-bottom: 10px; }
-.get-started-card p { opacity: 0.9; margin-bottom: 20px; }
-
-.btn-shop {
-    background: white;
-    color: #447c2e;
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-weight: 700;
-    width: max-content;
-    transition: 0.3s;
-}
-.btn-shop:hover { background: #000; color: white; transform: translateX(5px); }
-
 @media (max-width: 900px) {
-    .dashboard-lower { grid-template-columns: 1fr; }
+    .top-header { padding: 0 20px; }
+    .welcome-text h1 { font-size: 1.2rem; }
 }

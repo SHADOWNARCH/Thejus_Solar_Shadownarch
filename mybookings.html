@@ -10,6 +10,7 @@
 </head>
 <body>
 
+    <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <img src="Thejus solar logo wbg.png" alt="Logo" class="sidebar-logo">
@@ -18,23 +19,25 @@
             </button>
         </div>
         <ul class="nav-links">
-            <li><a href="custdash.html" ><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="custdash.html"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
             <li><a href="quogen1.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Generate Quotation</span></a></li>
             <li><a href="servicebook.html"><i class="fa-solid fa-calendar-check"></i> <span>Service Booking</span></a></li>
-            <li><a href="mybookings.html"  class="active"><i class="fa-solid fa-list-ul"></i> <span>My Bookings</span></a></li>
+            <li><a href="mybookings.html" class="active"><i class="fa-solid fa-list-ul"></i> <span>My Bookings</span></a></li>
             <li><a href="rs.html"><i class="fa-solid fa-cart-shopping"></i> <span>Retail Store</span></a></li>
         </ul>
     </nav>
 
+    <!-- Main Content -->
     <main class="main-content">
         <header class="top-header">
             <div class="welcome-text">
-                <h1><span>MY BOOKINGS</span></h1>
+                <h1><span>MY BOOKINGS & QUOTES</span></h1>
             </div>
             
             <div class="profile-section">
-                <div class="profile-pic" onclick="toggleDropdown()">
-                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                <div class="avatar" onclick="toggleDropdown()">
+                    <img id="userPic" src="" alt="Profile" style="width:100%; height:100%; border-radius:50%; display:none; object-fit: cover;">
+                    <i class="fa-solid fa-user" id="defaultUserIcon"></i>
                 </div>
                 
                 <div class="dropdown-menu" id="profileDropdown">
@@ -42,7 +45,7 @@
                         <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
                     </a>
                     <hr>
-                    <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    <a href="#" class="logout-link" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
             </div>
         </header>
@@ -50,71 +53,26 @@
         <section class="dashboard-body">
             <div class="page-info">
                 <h2>Your Service History</h2>
-                <p>Track the status of your current and past solar service requests.</p>
+                <p>Track the status of your solar service requests and quotations.</p>
             </div>
 
             <div class="table-container">
                 <table class="booking-table">
                     <thead>
                         <tr>
-                            <th>Booking ID</th>
-                            <th>Service Type</th>
-                            <th>Scheduled Date & Time</th>
+                            <th>Category</th>
+                            <th>Request Detail</th>
+                            <th>Submission Date</th>
                             <th>Status</th>
-                            <th>Technician</th>
+                            <th>Remarks / Tech</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="bookingsTableBody">
+                        <!-- Content injected via JavaScript -->
                         <tr>
-                            <td><strong>#BKG-801</strong></td>
-                            <td>
-                                <div class="cell-info">
-                                    <span class="main-text">Panel Washing</span><br>
-                                    <span class="sub-text">Regular Maintenance</span>
-                                </div>
+                            <td colspan="5" style="text-align:center; padding: 50px; color: #888;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading your history...
                             </td>
-                            <td>
-                                <div class="cell-info">
-                                    <span class="main-text"><i class="fa-regular fa-calendar"></i> 20 Aug 2026</span><br>
-                                    <span class="sub-text"><i class="fa-regular fa-clock"></i> 10:00 AM</span>
-                                </div>
-                            </td>
-                            <td><span class="status-pill status-progress">In Progress</span></td>
-                            <td><span class="tech-info">Anoop Varghese</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>#BKG-755</strong></td>
-                            <td>
-                                <div class="cell-info">
-                                    <span class="main-text">Inverter Configuration</span><br>
-                                    <span class="sub-text">System Optimization</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="cell-info">
-                                    <span class="main-text"><i class="fa-regular fa-calendar"></i> 12 Jul 2026</span><br>
-                                    <span class="sub-text"><i class="fa-regular fa-clock"></i> 02:30 PM</span>
-                                </div>
-                            </td>
-                            <td><span class="status-pill status-done">Completed</span></td>
-                            <td><span class="tech-info">Rahul K.</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>#BKG-809</strong></td>
-                            <td>
-                                <div class="cell-info">
-                                    <span class="main-text">Panel Dismantling</span><br>
-                                    <span class="sub-text">Relocation Request</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="cell-info">
-                                    <span class="main-text"><i class="fa-regular fa-calendar"></i> 28 Aug 2026</span><br>
-                                    <span class="sub-text"><i class="fa-regular fa-clock"></i> 09:00 AM</span>
-                                </div>
-                            </td>
-                            <td><span class="status-pill status-pending">Pending</span></td>
-                            <td><span class="tech-pending">To be assigned</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -122,15 +80,98 @@
         </section>
     </main>
 
-    <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
-        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
-        window.onclick = function(event) {
-            if (!event.target.closest('.profile-section')) {
-                const dropdown = document.getElementById('profileDropdown');
-                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Fetch Profile Pic
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().profilePic) {
+                    const pic = document.getElementById('userPic');
+                    pic.src = userDoc.data().profilePic;
+                    pic.style.display = 'block';
+                    document.getElementById('defaultUserIcon').style.display = 'none';
+                }
+                loadHistory(user.uid);
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        async function loadHistory(uid) {
+            const tableBody = document.getElementById('bookingsTableBody');
+            let combinedData = [];
+
+            try {
+                // Fetch Bookings
+                const bSnap = await getDocs(query(collection(db, "bookings"), where("customerUid", "==", uid)));
+                bSnap.forEach(d => combinedData.push({ ...d.data(), id: d.id, category: 'SERVICE' }));
+
+                // Fetch Quotations
+                const qSnap = await getDocs(query(collection(db, "quotations"), where("customerUid", "==", uid)));
+                qSnap.forEach(d => combinedData.push({ ...d.data(), id: d.id, category: 'QUOTE' }));
+
+                // Sort by Date (Timestamp)
+                combinedData.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+
+                if (combinedData.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px;">No requests found yet.</td></tr>`;
+                    return;
+                }
+
+                tableBody.innerHTML = combinedData.map(item => {
+                    const date = item.timestamp.toDate().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                    const isQuote = item.category === 'QUOTE';
+                    const statusClass = item.status.toLowerCase().replace(' ', '-');
+
+                    return `
+                        <tr>
+                            <td>
+                                <span class="category-badge ${isQuote ? 'badge-quote' : 'badge-service'}">
+                                    ${item.category}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="cell-info">
+                                    <span class="main-text">${isQuote ? (item.capacity + ' kWp Request') : item.serviceType}</span><br>
+                                    <span class="sub-text">${isQuote ? item.location : 'Service Booking'}</span>
+                                </div>
+                            </td>
+                            <td><i class="fa-regular fa-calendar-check"></i> ${date}</td>
+                            <td><span class="status-pill status-${statusClass}">${item.status}</span></td>
+                            <td>
+                                <span class="${item.technician ? 'tech-info' : 'tech-pending'}">
+                                    ${item.technician || (isQuote ? 'Under Review' : 'To Be Assigned')}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Error loading history.</td></tr>`;
             }
         }
+
+        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('collapsed');
+        window.toggleDropdown = () => document.getElementById('profileDropdown').classList.toggle('show');
     </script>
 </body>
 </html>

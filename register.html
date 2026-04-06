@@ -23,7 +23,7 @@
         <h1>CREATE ACCOUNT</h1>
         <h3>Please register to continue</h3>
 
-        <form id="regForm" action="#" class="form-box" novalidate onsubmit="return validateRegisterForm(event)">
+        <form id="regForm" action="#" class="form-box" novalidate onsubmit="validateRegisterForm(event)">
 
             <div class="input-box">
                 <input type="text" id="regName" placeholder="Full Name" required>
@@ -62,8 +62,28 @@
 
     <div id="toastMsg" class="toast"></div>
 
-    <script>
-        function toggleVisibility(inputId, iconElement) {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your specific Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        // Initialize Services
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- UI FUNCTIONS ---
+        window.toggleVisibility = function(inputId, iconElement) {
             const input = document.getElementById(inputId);
             if (input.type === "password") {
                 input.type = "text";
@@ -72,69 +92,67 @@
                 input.type = "password";
                 iconElement.classList.replace("fa-eye-slash", "fa-eye");
             }
-        }
+        };
 
-        function validateRegisterForm(event) {
+        window.showToast = function(message) {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3500);
+        };
+
+        // --- MAIN REGISTRATION LOGIC ---
+        window.validateRegisterForm = async function(event) {
+            event.preventDefault(); 
+
             const name = document.getElementById('regName').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const pass = document.getElementById('regPass').value;
             const confirm = document.getElementById('confirmPass').value;
 
-            if (!name || !email || !phone || !pass || !confirm) {
-                event.preventDefault();
-                showToast("All fields are required.");
-                return false;
-            }
-
+            // 1. Basic Front-end Validation
+            if (!name || !email || !phone || !pass || !confirm) return showToast("All fields are required.");
+            
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                event.preventDefault();
-                showToast("Please include an '@' and '.' in the email address.");
-                return false;
-            }
-
-            if (/\D/.test(phone)) {
-                event.preventDefault();
-                showToast("Type Error: Phone number must contain only numbers.");
-                return false;
-            }
-
-            if (phone.length !== 10) {
-                event.preventDefault();
-                showToast("Length Error: Phone number must be exactly 10 digits.");
-                return false;
-            }
+            if (!emailRegex.test(email)) return showToast("Please enter a valid email address.");
+            
+            if (/\D/.test(phone) || phone.length !== 10) return showToast("Enter a valid 10-digit phone number.");
 
             const hasUppercase = /[A-Z]/.test(pass);
             const hasNumber = /[0-9]/.test(pass);
             const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
-
             if (pass.length < 8 || !hasUppercase || !hasNumber || !hasSpecial) {
-                event.preventDefault();
-                showToast("Strong Password Required: Use 8+ chars, 1 uppercase, 1 number, and 1 special character.");
-                return false;
+                return showToast("Password needs 8+ chars, uppercase, number, and special character.");
             }
 
-            if (pass !== confirm) {
-                event.preventDefault();
-                showToast("Passwords do not match.");
-                return false;
+            if (pass !== confirm) return showToast("Passwords do not match.");
+
+            try {
+                // 2. Create User in Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                // 3. Save Name & Phone in Firestore Database
+                await setDoc(doc(db, "users", user.uid), {
+                    fullName: name,
+                    email: email,
+                    phone: phone,
+                    role: "customer",
+                    createdAt: new Date()
+                });
+
+                alert("Registration Successful! Please login to continue.");
+                window.location.href = "login.html";
+
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    showToast("This email is already registered.");
+                } else {
+                    showToast("Error: " + error.message);
+                }
             }
-
-            return true;
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById("toastMsg");
-            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
-            toast.classList.add("show");
-            
-            setTimeout(function(){
-                toast.classList.remove("show");
-            }, 3500);
-        }
+        };
     </script>
-
 </body>
 </html>

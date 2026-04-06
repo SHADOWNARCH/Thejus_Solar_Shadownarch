@@ -1,399 +1,100 @@
-/* =========================================
-   1. GLOBAL RESET & NAVIGATION
-   ========================================= */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f6f9; 
-    color: #333;
-}
-
-* {
-    box-sizing: border-box;
-}
+/* --- Global Styles --- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background-color: #f4f6f9; color: #333; }
 
 .page-nav {
-    background-color: #000000;
-    color: white;
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    background-color: #000; color: white; padding: 15px 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 1000;
 }
+.logo img { height: 40px; }
+.back-link { color: white; text-decoration: none; font-weight: 600; }
+.back-link:hover { color: #f1c40f; }
 
-.logo img {
-    height: 45px;
-    vertical-align: middle;
-}
-
-.back-link {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: color 0.3s;
-}
-
-.back-link i {
-    margin-right: 5px;
-}
-
-.back-link:hover {
-    color: #f1c40f; 
-}
-
-/* =========================================
-   2. TABLE WRAPPER & HEADER
-   ========================================= */
-.table-wrapper {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 0 20px;
-}
-
-.table-header {
-    margin-bottom: 20px;
-}
-
-.table-header h2 {
-    margin: 0 0 5px 0;
-    font-size: 2rem;
-    color: #000000;
-}
-
-.table-header p {
-    margin: 0;
-    color: #666;
-}
-
-/* =========================================
-   3. EMPLOYEE TABLE
-   ========================================= */
+/* --- Table Styling --- */
+.table-wrapper { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.table-header { margin-bottom: 20px; }
 .table-container {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    overflow-x: auto; 
-    border-top: 5px solid #447c2e; 
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-top: 5px solid #447c2e;
 }
-
-.emp-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px; 
-}
-
-.emp-table th, .emp-table td {
-    padding: 18px 20px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.emp-table th {
-    background-color: #fafafa;
-    color: #000000;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-}
-
-.emp-table tbody tr:hover {
-    background-color: #fcfcfc;
-}
+.emp-table { width: 100%; border-collapse: collapse; }
+.emp-table th, .emp-table td { padding: 18px 20px; text-align: left; border-bottom: 1px solid #eee; }
+.emp-table th { background: #fafafa; text-transform: uppercase; font-size: 0.85rem; font-weight: bold; }
 
 /* Status Badges */
-.status {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
+.status { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+.status.active { background: #e6f4ea; color: #447c2e; }
+.status.inactive { background: #feeced; color: #d93025; }
 
-.status.active {
-    background-color: #e6f4ea;
-    color: #447c2e; 
-}
+/* --- RETAIN COLOR CODED ACTION BUTTONS --- */
+.action-btns { display: flex; gap: 8px; }
+.btn-icon { border: none; background: transparent; cursor: pointer; font-size: 1.1rem; padding: 8px; border-radius: 5px; transition: 0.2s; }
+.view-btn { color: #555; } /* Gray for View */
+.edit-btn { color: #f1c40f; } /* Gold/Yellow for Edit */
+.delete-btn { color: #d93025; } /* Red for Delete */
 
-.status.inactive {
-    background-color: #feeced;
-    color: #d93025; 
-}
+.view-btn:hover { background-color: #eee; color: #000; }
+.edit-btn:hover { background-color: #f1c40f; color: #000; }
+.delete-btn:hover { background-color: #d93025; color: #fff; }
 
-/* =========================================
-   4. ACTION BUTTONS
-   ========================================= */
-.action-btns {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-icon {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 8px;
-    border-radius: 5px;
-    transition: all 0.2s ease;
-}
-
-.view-btn {
-    color: #555;
-}
-
-.view-btn:hover {
-    background-color: #eee;
-    color: #000;
-}
-
-.edit-btn {
-    color: #f1c40f; 
-}
-
-.edit-btn:hover {
-    background-color: #f1c40f;
-    color: #000;
-}
-
-.delete-btn {
-    color: #d93025; 
-}
-
-.delete-btn:hover {
-    background-color: #d93025;
-    color: #fff;
-}
-
-/* =========================================
-   5. MODALS (View, Edit, Delete)
-   ========================================= */
+/* --- Modals --- */
 .modal-overlay {
-    position: fixed;
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+    z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s;
 }
-
-.modal-overlay.show-modal {
-    opacity: 1;
-    visibility: visible;
-}
-
+.modal-overlay.show-modal { opacity: 1; visibility: visible; }
 .modal-card {
-    background-color: #ffffff;
-    width: 90%;
-    max-width: 450px;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    text-align: center;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
+    background: #fff; width: 90%; max-width: 400px; padding: 35px;
+    border-radius: 12px; text-align: center; transform: translateY(-20px); transition: 0.3s;
 }
+.modal-overlay.show-modal .modal-card { transform: translateY(0); }
+.form-modal { text-align: left; }
 
-.form-modal {
-    text-align: left; /* Keep form modal text aligned left */
-}
+.modal-card h3 { margin-bottom: 5px; font-size: 1.5rem; }
+.modal-card p { margin-bottom: 25px; font-size: 0.85rem; color: #777; }
 
-.modal-overlay.show-modal .modal-card {
-    transform: translateY(0);
-}
-
-.modal-icon.warning i {
-    font-size: 50px;
-    color: #d93025;
-    margin-bottom: 15px;
-}
-
-.modal-card h3 {
-    margin: 0 0 15px 0;
-    font-size: 1.6rem;
-    color: #000000;
-}
-
-.modal-card p {
-    color: #666;
-    margin-bottom: 30px;
-    line-height: 1.5;
-}
-
-/* Form inputs inside modals */
-.input-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
-    font-size: 0.95rem;
-}
+/* --- ICON & INPUT ALIGNMENT FIX --- */
+.input-group { margin-bottom: 18px; }
+.input-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.85rem; color: #555; }
 
 .input-box {
     position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    color: #888;
-    font-size: 1.1rem;
-}
-
-.input-box input,
-.custom-select {
-    width: 100%;
-    padding: 12px 15px 12px 45px; 
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: #ffffff;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    font-family: inherit;
-    color: #333;
-}
-
-.input-box input:focus,
-.custom-select:focus {
-    outline: none;
-    border-color: #447c2e;
-    box-shadow: 0 0 5px rgba(68, 124, 46, 0.3);
-}
-
-.input-box input[readonly],
-.readonly-bg {
-    background-color: #f0f0f0;
-    color: #666;
-    border-color: #ddd;
-    cursor: not-allowed;
-}
-.input-box input[readonly]:focus {
-    box-shadow: none;
-    border-color: #ddd;
-}
-
-/* Modal Actions */
-.modal-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 30px;
+    align-items: center;
 }
 
-/* If it's a delete modal, center the actions */
-#deleteModal .modal-actions {
-    justify-content: center;
-}
-
-.btn-cancel, .btn-danger, .btn-save {
-    padding: 12px 25px;
-    border-radius: 8px;
+.input-box i {
+    position: absolute;
+    left: 15px;
+    color: #888;
     font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
+    pointer-events: none;
 }
 
-.btn-cancel {
-    background: transparent;
-    border: 2px solid #ccc;
-    color: #555;
+.input-box input, .custom-select {
+    width: 100%;
+    padding: 12px 15px 12px 42px; /* Fixed padding to allow icon space */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    background-color: #fff;
 }
 
-.btn-cancel:hover {
-    background: #eee;
-    color: #000;
-}
+.input-box input[readonly] { background-color: #f9f9f9; border-color: #eee; color: #666; }
+.input-box input:focus { border-color: #447c2e; }
 
-.btn-danger {
-    background: #d93025;
-    border: 2px solid #d93025;
-    color: #fff;
-}
+/* Modal Buttons */
+.modal-actions { display: flex; gap: 10px; margin-top: 25px; justify-content: flex-end; }
+.btn-save { background: #f1c40f; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+.btn-danger { background: #d93025; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+.btn-cancel { background: #eee; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; }
 
-.btn-danger:hover {
-    background: #b3241d;
-    border-color: #b3241d;
-}
-
-.btn-save {
-    background-color: #f1c40f; 
-    border: 2px solid #f1c40f;
-    color: #000000;
-}
-
-.btn-save:hover {
-    background-color: #000000;
-    border-color: #000000;
-    color: #f1c40f;
-}
-
-/* =========================================
-   6. TOAST POP-UP MESSAGES
-   ========================================= */
+/* Toast Notification */
 .toast {
-    visibility: hidden;
-    min-width: 280px;
-    background-color: #d93025; 
-    color: #fff;
-    text-align: center;
-    border-radius: 8px;
-    padding: 16px 20px;
-    position: fixed;
-    z-index: 3000;
-    left: 50%;
-    bottom: 30px;
-    transform: translateX(-50%);
-    font-size: 1rem;
-    font-weight: 600;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    opacity: 0;
-    transition: opacity 0.4s ease, bottom 0.4s ease, visibility 0.4s;
+    visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    color: white; padding: 12px 25px; border-radius: 8px; z-index: 3000; transition: 0.4s; font-weight: 600;
 }
-
-.toast.show {
-    visibility: visible;
-    opacity: 1;
-    bottom: 50px;
-}
-
-.toast i {
-    margin-right: 8px;
-    font-size: 1.1rem;
-}
-
-/* =========================================
-   7. MOBILE RESPONSIVE ADJUSTMENTS
-   ========================================= */
-@media (max-width: 600px) {
-    .modal-actions {
-        flex-direction: column-reverse;
-    }
-    
-    .btn-cancel, .btn-danger, .btn-save {
-        width: 100%;
-    }
-    
-    .toast {
-        min-width: 90%;
-        font-size: 0.9rem;
-    }
-}
+.toast.show { visibility: visible; bottom: 50px; }

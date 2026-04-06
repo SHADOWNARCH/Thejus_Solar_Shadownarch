@@ -19,26 +19,13 @@
     </nav>
 
     <div class="profile-container">
-        
         <div class="profile-card">
             <div class="card-header">
                 <h2>Profile Personalisation</h2>
                 <p>Update your personal details and account security.</p>
             </div>
 
-            <form action="#" class="profile-form" onsubmit="return validateMainForm(event)">
-                
-                <div class="profile-pic-section">
-                    <div class="pic-wrapper">
-                        <div class="avatar-placeholder">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                    </div>
-                    <div class="upload-btn-wrapper">
-                        <button class="btn-upload" type="button"><i class="fa-solid fa-camera"></i> Change Photo</button>
-                        <input type="file" name="profile_pic" accept="image/*">
-                    </div>
-                </div>
+            <form id="profileForm" class="profile-form" onsubmit="validateMainForm(event)">
 
                 <div class="form-section">
                     <div class="section-header">
@@ -50,7 +37,7 @@
                         <label for="fullName">Full Name</label>
                         <div class="input-box">
                             <i class="fa-solid fa-user input-icon"></i>
-                            <input type="text" id="fullName" value="John Doe" readonly>
+                            <input type="text" id="fullName" value="Loading..." readonly>
                         </div>
                     </div>
 
@@ -58,7 +45,7 @@
                         <label for="email">Email Address</label>
                         <div class="input-box">
                             <i class="fa-solid fa-envelope input-icon"></i>
-                            <input type="email" id="email" value="johndoe@example.com" readonly>
+                            <input type="email" id="email" value="Loading..." readonly>
                         </div>
                     </div>
 
@@ -66,7 +53,7 @@
                         <label for="phone">Phone Number</label>
                         <div class="input-box">
                             <i class="fa-solid fa-phone input-icon"></i>
-                            <input type="tel" id="phone" value="+91 98765 43210" readonly>
+                            <input type="tel" id="phone" value="Loading..." readonly>
                         </div>
                     </div>
                 </div>
@@ -105,12 +92,10 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="history.back()">Cancel</button>
-                    <button type="submit" class="btn-save">Save Changes</button>
+                    <button type="submit" class="btn-save" id="saveBtn">Save Changes</button>
                 </div>
-
             </form>
         </div>
-
     </div>
 
     <div id="customEditModal" class="modal-overlay">
@@ -130,7 +115,7 @@
                 <label>Email Address</label>
                 <div class="input-box">
                     <i class="fa-solid fa-envelope input-icon"></i>
-                    <input type="email" id="modalEmail">
+                    <input type="email" id="modalEmail" disabled title="Email change requires re-authentication">
                 </div>
             </div>
 
@@ -151,104 +136,133 @@
 
     <div id="toastMsg" class="toast"></div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+
+        // --- FETCH USER DATA ON LOAD ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    document.getElementById('fullName').value = data.fullName;
+                    document.getElementById('email').value = data.email;
+                    document.getElementById('phone').value = data.phone;
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // --- SAVE PERSONAL INFO UPDATES ---
+        window.saveEditModal = async function() {
+            const name = document.getElementById('modalName').value.trim();
+            const phone = document.getElementById('modalPhone').value.trim();
+
+            if (!name || !phone) return showToast("Name and Phone are required.");
+
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    fullName: name,
+                    phone: phone
+                });
+                
+                document.getElementById('fullName').value = name;
+                document.getElementById('phone').value = phone;
+                
+                showToast("Details updated locally. Save Changes to confirm.");
+                closeEditModal();
+            } catch (error) {
+                showToast("Error updating: " + error.message);
+            }
+        };
+
+        // --- MAIN FORM SUBMIT (PASSWORD CHANGE) ---
+        window.validateMainForm = async function(event) {
+            event.preventDefault();
+            const saveBtn = document.getElementById('saveBtn');
+            const currentPass = document.getElementById('currentPass').value;
+            const newPass = document.getElementById('newPass').value;
+            const confirmPass = document.getElementById('confirmPass').value;
+
+            // Only proceed if user wants to change password
+            if (newPass || currentPass || confirmPass) {
+                if (!currentPass) return showToast("Current password required for change.");
+                if (newPass !== confirmPass) return showToast("Passwords do not match.");
+                if (newPass.length < 8) return showToast("New password must be 8+ characters.");
+
+                try {
+                    saveBtn.innerText = "Processing...";
+                    saveBtn.disabled = true;
+
+                    // Re-authenticate user before sensitive operation
+                    const credential = EmailAuthProvider.credential(currentUser.email, currentPass);
+                    await reauthenticateWithCredential(currentUser, credential);
+                    
+                    // Update Password in Auth
+                    await updatePassword(currentUser, newPass);
+                    showToast("Password updated successfully!");
+                } catch (error) {
+                    showToast("Auth Error: " + error.message);
+                } finally {
+                    saveBtn.innerText = "Save Changes";
+                    saveBtn.disabled = false;
+                }
+            } else {
+                showToast("Profile details are saved.");
+            }
+        };
+
+        // UI Helpers
+        window.showToast = function(message) {
+            const toast = document.getElementById("toastMsg");
+            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3500);
+        };
+    </script>
+
     <script>
-        // --- TOGGLE PASSWORD VISIBILITY ---
+        // --- UI NON-FIREBASE FUNCTIONS ---
         function togglePasswordVisibility(inputId, iconElement) {
             const input = document.getElementById(inputId);
             if (input.type === "password") {
                 input.type = "text";
-                iconElement.classList.remove("fa-eye");
-                iconElement.classList.add("fa-eye-slash");
+                iconElement.classList.replace("fa-eye", "fa-eye-slash");
             } else {
                 input.type = "password";
-                iconElement.classList.remove("fa-eye-slash");
-                iconElement.classList.add("fa-eye");
+                iconElement.classList.replace("fa-eye-slash", "fa-eye");
             }
         }
 
-        // --- MODAL LOGIC ---
         function openEditModal() {
             document.getElementById('modalName').value = document.getElementById('fullName').value;
             document.getElementById('modalEmail').value = document.getElementById('email').value;
             document.getElementById('modalPhone').value = document.getElementById('phone').value;
-            
             document.getElementById('customEditModal').classList.add('show-modal');
         }
 
         function closeEditModal() {
             document.getElementById('customEditModal').classList.remove('show-modal');
         }
-
-        function saveEditModal() {
-            const name = document.getElementById('modalName').value.trim();
-            const email = document.getElementById('modalEmail').value.trim();
-            const phone = document.getElementById('modalPhone').value.trim();
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
-
-            if (name === "" || email === "" || phone === "") {
-                showToast("All fields are required.");
-                return;
-            }
-
-            if (!emailRegex.test(email)) {
-                showToast("Please enter a valid email address.");
-                return;
-            }
-
-            const rawPhone = phone.replace(/[\s\-]/g, ''); 
-            if (!phoneRegex.test(rawPhone) || rawPhone.length < 10) {
-                showToast("Please enter a valid phone number (at least 10 digits).");
-                return;
-            }
-
-            document.getElementById('fullName').value = name;
-            document.getElementById('email').value = email;
-            document.getElementById('phone').value = phone;
-            
-            closeEditModal();
-        }
-
-        // --- MAIN FORM LOGIC (Password matching) ---
-        function validateMainForm(event) {
-            const currentPass = document.getElementById('currentPass').value;
-            const newPass = document.getElementById('newPass').value;
-            const confirmPass = document.getElementById('confirmPass').value;
-
-            if (newPass !== "" || confirmPass !== "" || currentPass !== "") {
-                if (currentPass === "") {
-                    event.preventDefault();
-                    showToast("Please enter your current password to set a new one.");
-                    return false;
-                }
-                if (newPass.length < 6) {
-                    event.preventDefault();
-                    showToast("New password must be at least 6 characters long.");
-                    return false;
-                }
-                if (newPass !== confirmPass) {
-                    event.preventDefault();
-                    showToast("New password and Confirm password do not match.");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        // --- TOAST POP-UP FUNCTION ---
-        function showToast(message) {
-            const toast = document.getElementById("toastMsg");
-            toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${message}`;
-            toast.classList.add("show");
-            
-            // Hide the toast after 3.5 seconds
-            setTimeout(function(){
-                toast.classList.remove("show");
-            }, 3500);
-        }
     </script>
-
 </body>
 </html>

@@ -18,7 +18,7 @@
             </button>
         </div>
         <ul class="nav-links">
-            <li><a href="employeedash.html" class="active"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
+            <li><a href="empdash.html" class="active"><i class="fa-solid fa-house-user"></i> <span>Dashboard</span></a></li>
             <li><a href="serappemp.html"><i class="fa-solid fa-briefcase"></i> <span>My Appointments</span></a></li>
         </ul>
     </nav>
@@ -27,19 +27,20 @@
         <header class="top-header">
             <div class="welcome-text">
                 <h1><span>WELCOME TO THEJUS SOLAR</span></h1>
+                <p id="displayEmpName" style="color: #447c2e; font-weight: bold; margin-left: 10px;"></p>
             </div>
             
             <div class="profile-section">
-                <div class="profile-pic" onclick="toggleDropdown()">
-                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
+                <div class="avatar" onclick="toggleDropdown()">
+                    <i class="fa-solid fa-user"></i>
                 </div>
                 
                 <div class="dropdown-menu" id="profileDropdown">
                     <a href="pp.html">
-                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
+                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Settings
                     </a>
                     <hr>
-                    <a href="lorr.html" class="logout-link">
+                    <a href="#" class="logout-link" onclick="handleLogout()">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </a>
                 </div>
@@ -59,6 +60,50 @@
             </div>
         </section>
     </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData.role !== "employee") {
+                        alert("Access Denied: Employees Only.");
+                        window.location.href = "login.html";
+                    } else {
+                        document.getElementById('displayEmpName').innerText = `Staff: ${userData.fullName}`;
+                    }
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        window.handleLogout = function() {
+            signOut(auth).then(() => {
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Logout Error", error);
+            });
+        };
+    </script>
 
     <script>
         function toggleSidebar() {

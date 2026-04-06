@@ -2,12 +2,12 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { display: flex; background-color: #f0f2f5; min-height: 100vh; width: 100%; overflow-x: hidden; }
 
-/* --- Sidebar (Standard Theme) --- */
+/* --- Sidebar --- */
 .sidebar { width: 260px; height: 100vh; background: #000; color: white; transition: 0.3s; position: sticky; top: 0; flex-shrink: 0; z-index: 1000; }
 .sidebar.collapsed { width: 80px; }
 .sidebar-header { padding: 20px; display: flex; align-items: center; justify-content: space-between; height: 80px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.sidebar-logo { width: 130px; transition: 0.2s; }
-.sidebar.collapsed .sidebar-logo { opacity: 0; width: 0; pointer-events: none; }
+.sidebar-logo { width: 130px; }
+.sidebar.collapsed .sidebar-logo { opacity: 0; pointer-events: none; }
 .toggle-btn { background: none; border: none; color: #45cba4; font-size: 1.5rem; cursor: pointer; }
 
 .nav-links { list-style: none; margin-top: 20px; }
@@ -22,57 +22,55 @@ body { display: flex; background-color: #f0f2f5; min-height: 100vh; width: 100%;
 .welcome-text h1 span { color: #447c2e; font-weight: 800; }
 
 .profile-section { position: relative; }
-.profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #45cba4; overflow: hidden; cursor: pointer; }
-.profile-pic img { width: 100%; height: 100%; object-fit: cover; }
-.dropdown-menu { position: absolute; top: 65px; right: 0; width: 240px; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; padding: 10px 0; z-index: 2000; }
+.avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #45cba4; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #f8f9fa; transition: 0.3s; }
+.avatar i { font-size: 1.4rem; color: #447c2e; }
+
+.dropdown-menu { position: absolute; top: 65px; right: 0; width: 220px; background: white; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; padding: 10px 0; z-index: 2000; }
 .dropdown-menu.show { display: block; }
 .dropdown-menu a { display: flex; align-items: center; padding: 12px 20px; text-decoration: none; color: #333; font-weight: 600; }
+.logout-link { color: #ff4d4d !important; border-top: 1px solid #eee; }
 
 /* --- Table Styling --- */
 .dashboard-body { padding: 30px 40px; }
 .page-info { margin-bottom: 25px; }
-.table-container { 
-    background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
-    overflow: hidden; border-top: 5px solid #447c2e; 
-}
+.table-container { background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); overflow: hidden; border-top: 5px solid #447c2e; }
 .inventory-table { width: 100%; border-collapse: collapse; min-width: 900px; }
 .inventory-table th { background: #f8f9fa; padding: 18px; text-align: left; color: #333; font-size: 0.85rem; text-transform: uppercase; }
 .inventory-table td { padding: 20px 18px; border-bottom: 1px solid #eee; vertical-align: middle; }
 
-/* Product Details Cell */
 .prod-item { display: flex; align-items: center; gap: 15px; }
 .prod-img { width: 50px; height: 50px; border-radius: 8px; border: 1px solid #eee; overflow: hidden; }
 .prod-img img { width: 100%; height: 100%; object-fit: cover; }
-.prod-info strong { display: block; color: #000; font-size: 1rem; }
+.prod-info strong { display: block; color: #000; }
 .prod-info span { font-size: 0.8rem; color: #888; }
 
-/* Tags & Quantities */
 .cat-tag { background: #f0f2f5; color: #555; padding: 4px 12px; border-radius: 5px; font-weight: 600; font-size: 0.85rem; }
-.qty-group { display: flex; flex-direction: column; }
 .qty-num { font-size: 1.2rem; font-weight: 800; }
 .qty-num.high { color: #447c2e; }
 .qty-num.low { color: #f1892c; }
-.qty-num.out { color: #d93025; }
-.qty-group small { font-size: 0.75rem; color: #999; }
+.qty-num.out { color: #d32f2f; }
 
-/* Status Pills */
-.status-pill { padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: inline-block; }
+.status-pill { padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: inline-block; min-width: 100px; text-align: center; }
 .in-stock { background: #ecf7ed; color: #2e7d32; }
 .low-stock { background: #fff8e1; color: #f1892c; }
 .out-of-stock { background: #fdf2f2; color: #d32f2f; }
 
-/* Buttons */
-.btn-restock { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; }
+.btn-restock { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; min-width: 130px; }
 .btn-restock.active { background: #f1892c; color: white; }
 .btn-restock.urgent { background: #d32f2f; color: white; }
 .btn-restock.disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; }
-.btn-restock.active:hover { transform: scale(1.05); background: #d97a20; }
+
+/* --- Modal --- */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 25px; border-radius: 12px; width: 350px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+.modal-body { margin: 20px 0; }
+.modal-body input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px; font-size: 1rem; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; }
+.btn-primary { background: #447c2e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-secondary { background: #eee; color: #333; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
 
 /* Toast */
-.toast {
-    visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    color: #fff; padding: 15px 30px; border-radius: 10px; z-index: 2000; transition: 0.4s;
-}
+.toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); color: #fff; padding: 15px 30px; border-radius: 10px; z-index: 2000; transition: 0.4s; font-weight: 600; }
 .toast.show { visibility: visible; bottom: 50px; }
 .toast.success { background: #447c2e; }
 .toast.error { background: #d93025; }

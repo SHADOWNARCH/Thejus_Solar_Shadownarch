@@ -7,7 +7,7 @@
 }
 
 body {
-    display: flex; /* Sidebar and Content sit side-by-side */
+    display: flex;
     background-color: #f0f2f5;
     min-height: 100vh;
     width: 100%;
@@ -44,7 +44,7 @@ body {
 .toggle-btn {
     background: none;
     border: none;
-    color: #45cba4; /* Teal */
+    color: #45cba4;
     font-size: 1.5rem;
     cursor: pointer;
     display: flex;
@@ -66,7 +66,7 @@ body {
 .nav-links li a i {
     font-size: 1.2rem;
     min-width: 35px;
-    color: #f1892c; /* Gold/Orange */
+    color: #f1892c;
 }
 
 .nav-links li a:hover, .nav-links li a.active {
@@ -97,15 +97,29 @@ body {
 .welcome-text h1 span { color: #447c2e; font-weight: 800; }
 
 .profile-section { position: relative; }
-.profile-pic {
+
+.avatar {
     width: 45px;
     height: 45px;
     border-radius: 50%;
     border: 2px solid #45cba4;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    background-color: #f8f9fa;
+    transition: 0.3s;
 }
-.profile-pic img { width: 100%; height: 100%; object-fit: cover; }
+
+.avatar i {
+    font-size: 1.4rem;
+    color: #447c2e;
+}
+
+.avatar:hover {
+    border-color: #f1892c;
+    background-color: #eef1ef;
+}
 
 .dropdown-menu {
     position: absolute;
@@ -119,6 +133,7 @@ body {
     padding: 10px 0;
     z-index: 2000;
 }
+
 .dropdown-menu.show { display: block; }
 .dropdown-menu a {
     display: flex;
@@ -137,7 +152,7 @@ body {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 25px;
     margin-bottom: 40px;
 }
@@ -146,7 +161,7 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
-    padding: 35px 25px;
+    padding: 30px 25px;
     border-radius: 18px;
     color: white;
     position: relative;
@@ -171,64 +186,16 @@ body {
 .arrow-icon { position: absolute; right: 25px; opacity: 0.6; transition: 0.3s; }
 .full-card:hover .arrow-icon { right: 15px; opacity: 1; }
 
-.stat-info h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
-.stat-label { font-size: 0.9rem; opacity: 0.9; }
+.stat-info h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+.stat-label { font-size: 0.85rem; opacity: 0.9; }
 
 /* Card Themes */
 .teal-card { background-color: #45cba4; }
 .orange-card { background-color: #f1892c; }
 .green-card { background-color: #447c2e; }
 
-/* --- Lower Section --- */
-.dashboard-lower {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 30px;
-}
-
-.content-box {
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    background: white;
-}
-
-.activity-box h2 { font-size: 1.2rem; margin-bottom: 20px; color: #333; }
-.activity-box li {
-    padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #444;
-}
-.check-item i { color: #45cba4; }
-.info-item i { color: #f1892c; }
-
-/* Manager CTA Card */
-.get-started-card {
-    background-color: #000000; /* Black for high-level management CTA */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-bottom: 6px solid #f1892c;
-}
-.get-started-card h2 { color: #f1892c; font-size: 1.5rem; margin-bottom: 10px; }
-.get-started-card p { opacity: 0.9; margin-bottom: 20px; }
-
-.btn-shop {
-    background: #f1892c;
-    color: #000;
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-weight: 700;
-    width: max-content;
-    transition: 0.3s;
-}
-.btn-shop:hover { background: #45cba4; color: #000; transform: translateX(5px); }
-
 @media (max-width: 900px) {
-    .dashboard-lower { grid-template-columns: 1fr; }
+    .top-header { padding: 0 20px; }
+    .welcome-text h1 { font-size: 1.1rem; }
+    .stats-grid { grid-template-columns: 1fr; }
 }

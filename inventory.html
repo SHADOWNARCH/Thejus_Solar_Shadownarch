@@ -30,19 +30,11 @@
 
     <main class="main-content">
         <header class="top-header">
-            <div class="welcome-text">
-                <h1><span>INVENTORY MANAGEMENT</span></h1>
-            </div>
-            
+            <div class="welcome-text"><h1><span>INVENTORY MANAGEMENT</span></h1></div>
             <div class="profile-section">
-                <div class="profile-pic" onclick="toggleDropdown()">
-                    <img id="userPic" src="https://via.placeholder.com/45" alt="Profile">
-                </div>
-                
+                <div class="avatar" onclick="toggleDropdown()"><i class="fa-solid fa-user"></i></div>
                 <div class="dropdown-menu" id="profileDropdown">
-                     <a href="pp.html">
-                        <i class="fa-solid fa-user-gear" style="color: #447c2e;"></i> Profile Personalization
-                    </a>
+                    <a href="pp.html"><i class="fa-solid fa-user-gear"></i> Profile</a>
                     <hr>
                     <a href="lorr.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
@@ -66,92 +58,135 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="prod-item">
-                                    <div class="prod-img"><img src="sp31.jpg" onerror="this.src='https://via.placeholder.com/50'"></div>
-                                    <div class="prod-info">
-                                        <strong>Solar Panels 300W</strong>
-                                        <span>SKU: TJS-PNL-300</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="cat-tag">Panels</span></td>
-                            <td>
-                                <div class="qty-group">
-                                    <span class="qty-num high">45</span>
-                                    <small>Units Available</small>
-                                </div>
-                            </td>
-                            <td><span class="status-pill in-stock">In Stock</span></td>
-                            <td><button class="btn-restock disabled" disabled>Sufficient</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="prod-item">
-                                    <div class="prod-img"><img src="sp51.jpg" onerror="this.src='https://via.placeholder.com/50'"></div>
-                                    <div class="prod-info">
-                                        <strong>Solar Panels 500W</strong>
-                                        <span>SKU: TJS-PNL-500</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="cat-tag">Panels</span></td>
-                            <td>
-                                <div class="qty-group">
-                                    <span class="qty-num low">8</span>
-                                    <small>Units Left</small>
-                                </div>
-                            </td>
-                            <td><span class="status-pill low-stock">Low Stock</span></td>
-                            <td><button class="btn-restock active" onclick="showToast('Restock order placed for 500W Panels', 'success')">Order Now</button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="prod-item">
-                                    <div class="prod-img"><img src="lb1.jpg" onerror="this.src='https://via.placeholder.com/50'"></div>
-                                    <div class="prod-info">
-                                        <strong>Lithium Battery 5kW</strong>
-                                        <span>SKU: TJS-BAT-LIT</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="cat-tag">Storage</span></td>
-                            <td>
-                                <div class="qty-group">
-                                    <span class="qty-num out">0</span>
-                                    <small>Empty</small>
-                                </div>
-                            </td>
-                            <td><span class="status-pill out-of-stock">Out of Stock</span></td>
-                            <td><button class="btn-restock urgent" onclick="showToast('URGENT: Battery restock initiated', 'error')">Urgent Order</button></td>
-                        </tr>
-                    </tbody>
+                    <tbody id="inventoryBody">
+                        </tbody>
                 </table>
             </div>
         </section>
     </main>
 
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <h3>Restock Product</h3>
+            <div class="modal-body">
+                <p><strong>Item:</strong> <span id="modalItemName"></span></p>
+                <p><strong>SKU:</strong> <span id="modalSKU"></span></p>
+                <label>Quantity to Add:</label>
+                <input type="number" id="orderQty" min="1" value="50">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" id="confirmOrderBtn">Update Stock</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toastMsg" class="toast"></div>
 
-    <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
-        function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('show'); }
-        
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById("toastMsg");
-            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
-            toast.className = `toast show ${type}`;
-            setTimeout(() => { toast.classList.remove("show"); }, 3000);
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv2TXPVCcn8x1BnnSLS6Let7gW85ENobs",
+            authDomain: "thejus-solar-shadownarch.firebaseapp.com",
+            projectId: "thejus-solar-shadownarch",
+            storageBucket: "thejus-solar-shadownarch.firebasestorage.app",
+            messagingSenderId: "283255550760",
+            appId: "1:283255550760:web:73aa595743c2aa8b3d561d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let currentSKU = "";
+
+        // 1. Listen to Database and Update Table
+        onSnapshot(collection(db, "inventory"), (snapshot) => {
+            const tbody = document.getElementById('inventoryBody');
+            tbody.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const item = doc.data();
+                const sku = doc.id;
+                const stock = item.stock;
+
+                let statusClass, statusText, btnClass, btnText, qtyClass;
+                let btnDisabled = false;
+
+                // LOGIC: Out=0, Low=1-50, In > 50
+                if (stock === 0) {
+                    statusClass = "out-of-stock"; statusText = "Out of Stock";
+                    btnClass = "urgent"; btnText = "Urgent Order"; qtyClass = "out";
+                } else if (stock > 0 && stock <= 50) {
+                    statusClass = "low-stock"; statusText = "Low Stock";
+                    btnClass = "active"; btnText = "Order Now"; qtyClass = "low";
+                } else {
+                    statusClass = "in-stock"; statusText = "In Stock";
+                    btnClass = "disabled"; btnText = "Sufficient"; qtyClass = "high";
+                    btnDisabled = true;
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            <div class="prod-item">
+                                <div class="prod-img">
+                                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/50'">
+                                </div>
+                                <div class="prod-info">
+                                    <strong>${item.name}</strong>
+                                    <span>SKU: ${sku}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="cat-tag">${item.category}</span></td>
+                        <td>
+                            <div class="qty-group">
+                                <span class="qty-num ${qtyClass}">${stock}</span>
+                                <small>Units Available</small>
+                            </div>
+                        </td>
+                        <td><span class="status-pill ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn-restock ${btnClass}" ${btnDisabled ? 'disabled' : ''} 
+                                onclick="openOrderModal('${sku}', '${item.name}')">
+                                ${btnText}
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+        });
+
+        // Modal Functions
+        window.openOrderModal = (sku, name) => {
+            currentSKU = sku;
+            document.getElementById('modalItemName').innerText = name;
+            document.getElementById('modalSKU').innerText = sku;
+            document.getElementById('orderModal').style.display = 'flex';
+        };
+
+        window.closeModal = () => document.getElementById('orderModal').style.display = 'none';
+
+        document.getElementById('confirmOrderBtn').onclick = async () => {
+            const qty = parseInt(document.getElementById('orderQty').value);
+            if (qty > 0) {
+                try {
+                    await updateDoc(doc(db, "inventory", currentSKU), { stock: increment(qty) });
+                    showToast(`Inventory updated for ${currentSKU}`, "success");
+                    closeModal();
+                } catch (e) { showToast("Database error", "error"); }
+            }
+        };
+
+        function showToast(msg, type) {
+            const t = document.getElementById("toastMsg");
+            t.innerText = msg;
+            t.className = `toast show ${type}`;
+            setTimeout(() => t.classList.remove("show"), 3000);
         }
 
-        window.onclick = function(event) {
-            if (!event.target.closest('.profile-section')) {
-                const dropdown = document.getElementById('profileDropdown');
-                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
-            }
-        }
+        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('collapsed');
+        window.toggleDropdown = () => document.getElementById('profileDropdown').classList.toggle('show');
     </script>
 </body>
 </html>
